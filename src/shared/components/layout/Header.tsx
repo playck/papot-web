@@ -2,10 +2,14 @@
 
 import Link from "next/link";
 import { useState } from "react";
-import { Menu, X, Search, ShoppingCart, User } from "lucide-react";
+import { Menu, X, Search, ShoppingCart, User, LogOut } from "lucide-react";
+import { useAuth } from "@/shared/hooks/useAuth";
+import { signOut } from "@/app/(auth)/services/api";
 
 const Header = () => {
+  const { user, loading } = useAuth();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
 
   const menuItems = [
     { name: "홈", href: "/" },
@@ -15,6 +19,15 @@ const Header = () => {
     { name: "가드닝", href: "/gardening" },
     { name: "이벤트", href: "/events" },
   ];
+
+  const handleSignOut = async () => {
+    try {
+      await signOut();
+      setIsUserMenuOpen(false);
+    } catch (error) {
+      console.error("로그아웃 실패:", error);
+    }
+  };
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -57,10 +70,69 @@ const Header = () => {
               <span className="sr-only">장바구니</span>
             </button>
 
-            <button className="h-9 w-9 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground flex">
-              <User className="h-4 w-4" />
-              <span className="sr-only">사용자 메뉴</span>
-            </button>
+            {/* 사용자 메뉴 */}
+            <div className="relative">
+              {loading ? (
+                <div className="h-9 w-9 rounded-md bg-muted animate-pulse" />
+              ) : user ? (
+                <>
+                  <button
+                    className="h-9 w-9 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground flex"
+                    onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
+                  >
+                    <User className="h-4 w-4" />
+                    <span className="sr-only">사용자 메뉴</span>
+                  </button>
+
+                  {/* 사용자 드롭다운 메뉴 */}
+                  {isUserMenuOpen && (
+                    <div className="absolute right-0 mt-2 w-48 bg-card border border-border rounded-md shadow-lg py-1 z-50">
+                      <div className="px-4 py-2 border-b border-border">
+                        <p className="text-sm font-medium text-foreground">
+                          {user.userName}님
+                        </p>
+                      </div>
+                      <Link
+                        href="/mypage"
+                        className="block px-4 py-2 text-sm text-foreground hover:bg-accent"
+                        onClick={() => setIsUserMenuOpen(false)}
+                      >
+                        마이페이지
+                      </Link>
+                      <Link
+                        href="/orders"
+                        className="block px-4 py-2 text-sm text-foreground hover:bg-accent"
+                        onClick={() => setIsUserMenuOpen(false)}
+                      >
+                        주문 내역
+                      </Link>
+                      <button
+                        onClick={handleSignOut}
+                        className="w-full text-left px-4 py-2 text-sm text-foreground hover:bg-accent flex items-center space-x-2"
+                      >
+                        <LogOut className="h-4 w-4" />
+                        <span>로그아웃</span>
+                      </button>
+                    </div>
+                  )}
+                </>
+              ) : (
+                <div className="flex items-center space-x-2">
+                  <Link
+                    href="/signin"
+                    className="text-sm font-medium text-muted-foreground hover:text-primary-600 transition-colors"
+                  >
+                    로그인
+                  </Link>
+                  <Link
+                    href="/signup"
+                    className="text-sm font-medium bg-primary-600 text-white px-3 py-1 rounded-md hover:bg-primary-700 transition-colors"
+                  >
+                    회원가입
+                  </Link>
+                </div>
+              )}
+            </div>
 
             {/* 모바일 메뉴 버튼 */}
             <button
@@ -91,11 +163,34 @@ const Header = () => {
                   {item.name}
                 </Link>
               ))}
-              {/* 모바일에서만 보이는 검색 */}
               <button className="sm:hidden px-2 py-2 text-sm font-medium text-muted-foreground transition-colors hover:text-primary-600 hover:bg-accent rounded-md text-left flex items-center space-x-2">
                 <Search className="h-4 w-4" />
                 <span>검색</span>
               </button>
+
+              {/* 모바일 사용자 메뉴 */}
+              {user && (
+                <>
+                  <div className="border-t border-border pt-2 mt-2">
+                    <p className="px-2 py-1 text-xs text-muted-foreground">
+                      {user.userName}
+                    </p>
+                  </div>
+                  <Link
+                    href="/mypage"
+                    className="px-2 py-2 text-sm font-medium text-muted-foreground transition-colors hover:text-primary-600 hover:bg-accent rounded-md"
+                    onClick={() => setIsMenuOpen(false)}
+                  >
+                    마이페이지
+                  </Link>
+                  <button
+                    onClick={handleSignOut}
+                    className="w-full text-left px-2 py-2 text-sm font-medium text-muted-foreground transition-colors hover:text-primary-600 hover:bg-accent rounded-md"
+                  >
+                    로그아웃
+                  </button>
+                </>
+              )}
             </nav>
           </div>
         )}
