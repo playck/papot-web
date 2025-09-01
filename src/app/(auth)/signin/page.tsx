@@ -55,7 +55,6 @@ export default function SignInPage() {
 
       router.push("/");
     } catch (error) {
-      // Supabase 에러 메시지 처리
       const errorMessage =
         error instanceof Error
           ? error.message
