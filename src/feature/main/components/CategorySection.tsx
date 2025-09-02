@@ -1,6 +1,5 @@
-"use client";
-
-import { useProductList } from "@/shared/hooks/useProductList";
+import Link from "next/link";
+import { getProducts } from "@/shared/api/server-api";
 import ProductCard from "@/feature/main/components/ProductCard";
 
 interface CategorySectionProps {
@@ -8,55 +7,14 @@ interface CategorySectionProps {
   category?: string;
 }
 
-const CategorySection = ({ title, category }: CategorySectionProps) => {
-  const { data, isLoading, error } = useProductList({
+const CategorySection = async ({ title, category }: CategorySectionProps) => {
+  const data = await getProducts({
     category,
     limit: 12,
   });
 
-  // 로딩 상태
-  if (isLoading) {
-    return (
-      <section className="py-16 bg-background">
-        <div className="container mx-auto px-4">
-          <div className="mb-12 text-center">
-            <h2 className="text-3xl font-bold text-foreground mb-4">{title}</h2>
-            <div className="w-24 h-1 bg-primary-600 mx-auto rounded-full"></div>
-          </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {Array.from({ length: 8 }).map((_, index) => (
-              <div
-                key={index}
-                className="bg-card rounded-xl overflow-hidden shadow-sm animate-pulse"
-              >
-                <div className="aspect-square bg-neutral-200"></div>
-                <div className="p-4">
-                  <div className="h-4 bg-neutral-200 rounded mb-2"></div>
-                  <div className="h-4 bg-neutral-200 rounded w-2/3"></div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-    );
-  }
-
-  // 에러 상태
-  if (error) {
-    return (
-      <section className="py-16 bg-background">
-        <div className="container mx-auto px-4">
-          <div className="mb-12 text-center">
-            <h2 className="text-3xl font-bold text-foreground mb-4">{title}</h2>
-            <div className="w-24 h-1 bg-primary-600 mx-auto rounded-full"></div>
-          </div>
-        </div>
-      </section>
-    );
-  }
-
   const products = data?.products || [];
+
   return (
     <section className="py-16 bg-background">
       <div className="container mx-auto px-4">
@@ -68,16 +26,21 @@ const CategorySection = ({ title, category }: CategorySectionProps) => {
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {products.map((product) => (
-            <ProductCard
+            <Link
               key={product.id}
-              product={product}
-              onClick={() => {
-                // TODO: 상품 상세 페이지로 이동
-                console.log(`상품 클릭: ${product.name}`);
-              }}
-            />
+              href={`/products/${product.id}`}
+              className="block transition-transform hover:scale-105"
+            >
+              <ProductCard product={product} />
+            </Link>
           ))}
         </div>
+
+        {products.length === 0 && (
+          <div className="text-center py-12">
+            <p className="text-gray-500">상품이 없습니다.</p>
+          </div>
+        )}
       </div>
     </section>
   );

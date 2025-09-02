@@ -1,7 +1,7 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
-import { getProducts, getProduct, getCategories } from "../api/api";
+import { getProducts, getProduct, getCategories } from "../api/client-api";
 import { ProductListParams } from "../types/product";
 
 // 상품 목록 조회

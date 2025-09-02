@@ -1,14 +1,11 @@
-"use client";
-
 import Image from "next/image";
 import { Product } from "@/shared/types/product";
 
 interface ProductCardProps {
   product: Product;
-  onClick?: () => void;
 }
 
-const ProductCard = ({ product, onClick }: ProductCardProps) => {
+const ProductCard = ({ product }: ProductCardProps) => {
   const discountedPrice = product.discountRate
     ? product.price * (1 - product.discountRate / 100)
     : product.price;
@@ -19,10 +16,7 @@ const ProductCard = ({ product, onClick }: ProductCardProps) => {
   }
 
   return (
-    <div
-      className="group cursor-pointer bg-card rounded-xl overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300 hover:-translate-y-1"
-      onClick={onClick}
-    >
+    <div className="group bg-card rounded-xl overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
       {/* 상품 이미지 */}
       <div className="aspect-square overflow-hidden bg-neutral-100 relative">
         {product.imageUrls && product.imageUrls.length > 0 ? (
