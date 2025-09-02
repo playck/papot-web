@@ -1,4 +1,7 @@
-import { ProductImageWrapper } from "@/feature/product/detail/components";
+import {
+  ProductImageWrapper,
+  ProductInfo,
+} from "@/feature/product/detail/components";
 
 interface ProductDetailPageProps {
   params: {
@@ -20,10 +23,23 @@ export default function ProductDetailPage({ params }: ProductDetailPageProps) {
         {/* 이미지 섹션 */}
         <ProductImageWrapper
           imageUrls={mockImageUrls}
-          productName="샘플 제품"
+          productName="[브랜드위크] 화분"
         />
 
         {/* 제품 정보 섹션 */}
+        <div className="space-y-6">
+          <ProductInfo
+            title="[브랜드위크] 화분"
+            originalPrice={30900}
+            discountedPrice={25647}
+            discountRate={61}
+            productId={params.id}
+            pointRate={0.1}
+            shippingFee={3000}
+            shippingThreshold={70000}
+            deliveryDate="9/8(일)"
+          />
+        </div>
       </div>
     </div>
   );

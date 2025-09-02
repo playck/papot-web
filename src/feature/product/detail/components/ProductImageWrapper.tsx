@@ -17,8 +17,8 @@ export default function ProductImageWrapper({
 
   if (noImages) {
     return (
-      <div className="w-full aspect-square bg-gray-100 rounded-lg flex items-center justify-center">
-        <span className="text-gray-400">이미지가 없습니다</span>
+      <div className="w-full aspect-square bg-neutral-100 rounded-lg flex items-center justify-center">
+        <span className="text-neutral-400">이미지가 없습니다</span>
       </div>
     );
   }
@@ -26,7 +26,7 @@ export default function ProductImageWrapper({
   return (
     <div className="w-full space-y-4">
       {/* 메인 이미지 */}
-      <div className="relative w-full aspect-square bg-gray-50 rounded-lg overflow-hidden">
+      <div className="relative w-full aspect-square bg-neutral-50 rounded-lg overflow-hidden">
         <Image
           src={imageUrls[selectedImageIndex]}
           alt={`${productName} 이미지 ${selectedImageIndex + 1}`}
@@ -45,8 +45,8 @@ export default function ProductImageWrapper({
               key={index}
               className={`relative flex-shrink-0 w-20 h-20 rounded-md overflow-hidden border-2 transition-all duration-200 ${
                 selectedImageIndex === index
-                  ? "border-green-500 ring-2 ring-green-200"
-                  : "border-gray-200 hover:border-gray-300"
+                  ? "border-primary-600 ring-2 ring-primary-200"
+                  : "border-neutral-200 hover:border-neutral-300"
               }`}
               onMouseEnter={() => setSelectedImageIndex(index)}
               onClick={() => setSelectedImageIndex(index)}
