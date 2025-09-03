@@ -28,7 +28,7 @@ const CategorySection = async ({ title, category }: CategorySectionProps) => {
           {products.map((product) => (
             <Link
               key={product.id}
-              href={`/products/${product.id}`}
+              href={`/product/detail/${product.id}`}
               className="block transition-transform hover:scale-105"
             >
               <ProductCard product={product} />

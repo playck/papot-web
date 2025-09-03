@@ -12,7 +12,7 @@ interface ProductInfoProps {
   discountedPrice?: number;
   discountRate?: number;
   productId?: string;
-  pointRate?: number; // 적립률 (예: 1% -> 1)
+  pointRate?: number; // 적립률
   shippingFee?: number; // 배송비 (0이면 무료배송)
   shippingThreshold?: number; // 무료배송 기준 금액
   deliveryDate?: string; // 도착 예정일
