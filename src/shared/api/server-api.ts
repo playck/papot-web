@@ -1,11 +1,6 @@
 import { createClient } from "@/services/supabase/server";
-import {
-  Product,
-  ProductListParams,
-  ProductListResponse,
-  mapSupabaseProductToClient,
-} from "../types/product";
-import { Product as SupabaseProduct } from "@/types/supabase";
+import { ProductListParams, ProductListResponse } from "../types/product";
+import { Product as ProductType } from "@/types/supabase";
 
 // 상품 목록 조회
 export async function getProducts(
@@ -41,7 +36,7 @@ export async function getProducts(
   const dbSortBy = sortBy === "createdAt" ? "created_at" : sortBy;
   query = query.order(dbSortBy, { ascending: sortOrder === "asc" });
 
-  // 페이지네이션
+  // 페이지네이션 쿼리
   query = query.range(offset, offset + limit - 1);
 
   const { data, error, count } = await query;
@@ -55,9 +50,7 @@ export async function getProducts(
     };
   }
 
-  const products: Product[] = (data || []).map((item: SupabaseProduct) =>
-    mapSupabaseProductToClient(item)
-  );
+  const products: ProductType[] = data || [];
 
   return {
     products,
@@ -67,7 +60,7 @@ export async function getProducts(
 }
 
 // 상품 상세 조회
-export async function getProduct(id: string): Promise<Product | null> {
+export async function getProduct(id: string): Promise<ProductType | null> {
   const supabase = await createClient();
 
   const { data, error } = await supabase
@@ -86,7 +79,7 @@ export async function getProduct(id: string): Promise<Product | null> {
     return null;
   }
 
-  return mapSupabaseProductToClient(data as SupabaseProduct);
+  return data as ProductType;
 }
 
 // 카테고리 목록 조회
