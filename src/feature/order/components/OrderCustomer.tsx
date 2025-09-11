@@ -2,14 +2,20 @@
 
 import { OrderCustomer as OrderCustomerType } from "@/shared/types/order";
 import { Input } from "@/shared/components";
+import { useOrderStore } from "@/feature/order/store/order";
 
 interface OrderCustomerProps {
   customer: OrderCustomerType;
 }
 
 export default function OrderCustomer({ customer }: OrderCustomerProps) {
+  const { updateCustomer } = useOrderStore();
+
   const handleInputChange = (field: keyof OrderCustomerType, value: string) => {
-    console.log(field, value);
+    updateCustomer({
+      ...customer,
+      [field]: value,
+    });
   };
 
   return (

@@ -2,27 +2,27 @@
 
 import { ShippingAddress as ShippingAddressType } from "@/shared/types/order";
 import { Input } from "@/shared/components";
+import { useOrderStore } from "@/feature/order/store/order";
 
 interface ShippingAddressProps {
   shippingAddress: ShippingAddressType;
-  onShippingAddressChange?: (shippingAddress: ShippingAddressType) => void;
 }
 
 export default function ShippingAddress({
   shippingAddress,
-  onShippingAddressChange,
 }: ShippingAddressProps) {
+  const { updateShippingAddress } = useOrderStore();
+
   const handleInputChange = (
     field: keyof ShippingAddressType,
     value: string
   ) => {
-    if (onShippingAddressChange) {
-      onShippingAddressChange({
-        ...shippingAddress,
-        [field]: value,
-      });
-    }
+    updateShippingAddress({
+      ...shippingAddress,
+      [field]: value,
+    });
   };
+
   return (
     <div className="bg-white rounded-lg border border-neutral-200 p-6">
       <div className="mb-4">
