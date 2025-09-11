@@ -1,5 +1,5 @@
 import { Product } from "@/types/supabase";
-import { ProductType } from "@/shared/types/product";
+import { Product as ProductType } from "@/shared/types/product";
 
 /**
  * 상품 상세 표시 정보 타입
