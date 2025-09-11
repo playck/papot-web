@@ -6,19 +6,19 @@ import { Menu, X, Search, ShoppingCart, User, LogOut } from "lucide-react";
 import { useAuth } from "@/shared/hooks/useAuth";
 import { signOut } from "@/app/(auth)/services/api";
 
+const menuItems = [
+  { name: "홈", href: "/" },
+  { name: "식물", href: "/product/category/plants", id: "1" },
+  { name: "꽃", href: "/product/category/flowers", id: "2" },
+  { name: "화분", href: "/product/category/pots", id: "3" },
+  { name: "가드닝", href: "/product/category/gardening", id: "4" },
+  { name: "이벤트", href: "/product/category/events", id: "5" },
+];
+
 const Header = () => {
   const { user, loading } = useAuth();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
-
-  const menuItems = [
-    { name: "홈", href: "/" },
-    { name: "식물", href: "/plants" },
-    { name: "꽃", href: "/flowers" },
-    { name: "화분", href: "/pots" },
-    { name: "가드닝", href: "/gardening" },
-    { name: "이벤트", href: "/events" },
-  ];
 
   const handleSignOut = async () => {
     try {
