@@ -186,14 +186,13 @@ export async function getUserProfile(userId: string) {
   const { data, error } = await supabase
     .from("profiles")
     .select("*")
-    .eq("id", userId)
-    .single();
+    .eq("id", userId);
 
   if (error) {
     throw new Error(`프로필 조회 실패: ${error.message}`);
   }
 
-  return data;
+  return data && data.length > 0 ? data[0] : null;
 }
 
 // 유저 정보 업데이트
