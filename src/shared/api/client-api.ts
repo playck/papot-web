@@ -180,3 +180,42 @@ export async function getUserOrders(userId: string) {
     }, 500);
   });
 }
+
+// 사용자 프로필 정보 조회
+export async function getUserProfile(userId: string) {
+  const { data, error } = await supabase
+    .from("profiles")
+    .select("*")
+    .eq("id", userId)
+    .single();
+
+  if (error) {
+    throw new Error(`프로필 조회 실패: ${error.message}`);
+  }
+
+  return data;
+}
+
+// 유저 정보 업데이트
+export interface UpdateProfileData {
+  user_name?: string;
+  phone?: string;
+}
+
+export async function updateUserProfile(
+  userId: string,
+  profileData: UpdateProfileData
+) {
+  const { data, error } = await supabase
+    .from("profiles")
+    .update(profileData)
+    .eq("id", userId)
+    .select()
+    .single();
+
+  if (error) {
+    throw new Error(`프로필 업데이트 실패: ${error.message}`);
+  }
+
+  return data;
+}
