@@ -196,7 +196,7 @@ export default function ProductInfo({
           </button>
         </div>
 
-        <button
+        {/* <button
           onClick={handleBookmarkClick}
           className="w-full flex items-center justify-center gap-2 py-3 px-6 border border-neutral-300 text-neutral-700 font-medium rounded-lg hover:bg-neutral-50 transition-colors cursor-pointer"
         >
@@ -206,7 +206,7 @@ export default function ProductInfo({
             }`}
           />
           {bookmarked ? "찜 해제" : "찜하기"}
-        </button>
+        </button> */}
       </div>
     </div>
   );

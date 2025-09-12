@@ -1,6 +1,11 @@
 "use client";
 
-import { ProductDetailInfo, ProductImageWrapper, ProductInfo } from "./index";
+import {
+  ProductDetailInfo,
+  ProductImageWrapper,
+  ProductInfo,
+  MobileProductDetailView,
+} from "./index";
 
 interface ProductDetailClientProps {
   product: {
@@ -22,43 +27,56 @@ export default function ProductDetailClient({
   productId,
 }: ProductDetailClientProps) {
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-      {/* 왼쪽: 이미지 + 상세정보 */}
-      <div className="space-y-12">
-        <ProductImageWrapper
-          imageUrls={product.imageUrls}
-          productName={product.name}
-        />
+    <>
+      {/* 모바일 뷰 */}
+      <div className="block lg:hidden">
+        <MobileProductDetailView product={product} productId={productId} />
+      </div>
 
-        {/* 상세 정보 섹션 */}
-        <div>
-          <div className="bg-gradient-to-br from-primary-50 to-primary-100 rounded px-6 py-3 shadow-sm border border-primary-200 mb-6">
-            <div className="flex items-center gap-3">
-              <div className="w-1 h-6 bg-gradient-to-b from-primary-600 to-primary-700 rounded-full"></div>
-              <h2 className="text-2xl font-bold text-gray-900">
-                상품 상세정보
-              </h2>
+      {/* 데스크톱 뷰 */}
+      <div className="hidden lg:block">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          {/* 왼쪽: 이미지 + 상세정보 */}
+          <div className="space-y-12">
+            <ProductImageWrapper
+              imageUrls={product.imageUrls}
+              productName={product.name}
+            />
+
+            {/* 상세 정보 섹션 */}
+            <div>
+              <div className="bg-gradient-to-br from-primary-50 to-primary-100 rounded px-6 py-3 shadow-sm border border-primary-200 mb-6">
+                <div className="flex items-center gap-3">
+                  <div className="w-1 h-6 bg-gradient-to-b from-primary-600 to-primary-700 rounded-full"></div>
+                  <h2 className="text-2xl font-bold text-gray-900">
+                    상품 상세정보
+                  </h2>
+                </div>
+              </div>
+
+              <div className="bg-white">
+                <ProductDetailInfo htmlContent={product.detailDescription} />
+              </div>
             </div>
           </div>
 
-          <div className="bg-white">
-            <ProductDetailInfo htmlContent={product.detailDescription} />
+          {/* 오른쪽: 제품 구매정보 */}
+          <div className="sticky top-24 self-start">
+            <ProductInfo
+              title={product.name}
+              originalPrice={product.price}
+              discountedPrice={product.discountedPrice}
+              discountRate={
+                product.hasDiscount ? product.discountRate : undefined
+              }
+              productId={productId}
+              pointRate={0.1}
+              deliveryDate="9/2(화)"
+              imageUrl={product.imageUrls[0]}
+            />
           </div>
         </div>
       </div>
-
-      {/* 오른쪽: 제품 구매정보 */}
-      <div className="sticky top-24 self-start">
-        <ProductInfo
-          title={product.name}
-          originalPrice={product.price}
-          discountedPrice={product.discountedPrice}
-          discountRate={product.hasDiscount ? product.discountRate : undefined}
-          productId={productId}
-          pointRate={0.1}
-          deliveryDate="9/2(화)"
-        />
-      </div>
-    </div>
+    </>
   );
 }
