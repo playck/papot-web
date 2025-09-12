@@ -5,3 +5,4 @@ export { default as Input } from "./Input";
 export { default as PageLoader } from "./PageLoader";
 export { default as PageError } from "./PageError";
 export { default as ProductEmpty } from "./ProductEmpty";
+export { default as StatusBadge } from "./StatusBadge";
