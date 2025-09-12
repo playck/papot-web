@@ -96,3 +96,87 @@ export async function getCategories(): Promise<string[]> {
   const categories = [...new Set(data.map((item) => item.category))].sort();
   return categories;
 }
+
+// 주문 목록 조회 (임시 Mock 데이터)
+export async function getUserOrders(userId: string) {
+  // 실제 API 구현 전까지 Mock 데이터 사용
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      resolve([
+        {
+          id: "order-1",
+          orderNumber: "2024091201",
+          customerId: userId,
+          status: "delivered",
+          createdAt: new Date("2024-09-01"),
+          updatedAt: new Date("2024-09-05"),
+          items: [
+            {
+              id: "item-1",
+              productId: "1",
+              product: {
+                id: "1",
+                name: "프리미엄 유기농 쌀",
+                price: 25000,
+                imageUrls: ["/images/rice.jpg"],
+              },
+              quantity: 2,
+              unitPrice: 25000,
+              totalPrice: 50000,
+            },
+          ],
+          summary: {
+            totalProductPrice: 50000,
+            shippingFee: 3000,
+            couponDiscount: 0,
+            pointDiscount: 0,
+            finalPrice: 53000,
+          },
+        },
+        {
+          id: "order-2",
+          orderNumber: "2024090801",
+          customerId: userId,
+          status: "shipped",
+          createdAt: new Date("2024-08-28"),
+          updatedAt: new Date("2024-09-01"),
+          items: [
+            {
+              id: "item-2",
+              productId: "2",
+              product: {
+                id: "2",
+                name: "신선한 계란",
+                price: 8000,
+                imageUrls: ["/images/eggs.jpg"],
+              },
+              quantity: 1,
+              unitPrice: 8000,
+              totalPrice: 8000,
+            },
+            {
+              id: "item-3",
+              productId: "3",
+              product: {
+                id: "3",
+                name: "유기농 우유",
+                price: 4500,
+                imageUrls: ["/images/milk.jpg"],
+              },
+              quantity: 3,
+              unitPrice: 4500,
+              totalPrice: 13500,
+            },
+          ],
+          summary: {
+            totalProductPrice: 21500,
+            shippingFee: 3000,
+            couponDiscount: 1500,
+            pointDiscount: 0,
+            finalPrice: 23000,
+          },
+        },
+      ]);
+    }, 500);
+  });
+}
