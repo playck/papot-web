@@ -5,6 +5,7 @@ import { useState } from "react";
 import Counter from "@/shared/components/Counter";
 import useShare from "@/shared/hooks/useShare";
 import { formatKoreanPrice } from "@/shared/utils/price";
+import { useCartStore } from "@/feature/cart/store/cart";
 
 interface ProductInfoProps {
   title: string;
@@ -16,6 +17,7 @@ interface ProductInfoProps {
   shippingFee?: number; // 배송비 (0이면 무료배송)
   shippingThreshold?: number; // 무료배송 기준 금액
   deliveryDate?: string; // 도착 예정일
+  imageUrl?: string; // 상품 이미지 URL
 }
 
 export default function ProductInfo({
@@ -28,10 +30,12 @@ export default function ProductInfo({
   shippingFee = 3000,
   shippingThreshold = 70000,
   deliveryDate = "9/8(일)",
+  imageUrl,
 }: ProductInfoProps) {
   const [bookmarked, setBookmarked] = useState(false);
   const [quantity, setQuantity] = useState(1);
   const { share } = useShare();
+  const { addItem } = useCartStore();
 
   const handleBookmarkClick = async () => {
     try {
@@ -48,8 +52,20 @@ export default function ProductInfo({
   };
 
   const handleAddToCart = () => {
-    console.log(`장바구니에 추가: ${productId}, 수량: ${quantity}개`);
-    // TODO: 실제 장바구니 API 호출
+    if (!productId) {
+      alert("상품 정보를 찾을 수 없습니다.");
+      return;
+    }
+
+    addItem({
+      productId,
+      name: title,
+      price: finalPrice,
+      imageUrl,
+      quantity,
+    });
+
+    alert("장바구니에 상품이 추가되었습니다!");
   };
 
   const handleBuyNow = () => {
