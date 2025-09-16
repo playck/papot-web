@@ -1,3 +1,6 @@
+"use client";
+
+import { useState } from "react";
 import Image from "next/image";
 import { Product } from "@/shared/types/product";
 
@@ -6,6 +9,7 @@ interface ProductCardProps {
 }
 
 const ProductCard = ({ product }: ProductCardProps) => {
+  const [imageError, setImageError] = useState(false);
   const discountedPrice = product.discountRate
     ? product.price * (1 - product.discountRate / 100)
     : product.price;
@@ -19,13 +23,16 @@ const ProductCard = ({ product }: ProductCardProps) => {
     <div className="group bg-card rounded-xl overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
       {/* 상품 이미지 */}
       <div className="aspect-square overflow-hidden bg-neutral-100 relative">
-        {product.imageUrls && product.imageUrls.length > 0 ? (
+        {product.imageUrls && product.imageUrls.length > 0 && !imageError ? (
           <Image
             src={product.imageUrls[0]}
             alt={product.name}
             fill
             className="object-cover group-hover:scale-105 transition-transform duration-300"
             sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+            onError={() => {
+              setImageError(true);
+            }}
           />
         ) : (
           <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-blue-50 to-purple-50 text-neutral-600">
