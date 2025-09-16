@@ -36,8 +36,7 @@ export function validateOrderTotal(order: Order): boolean {
 }
 
 export function useOrder() {
-  const { order, isProcessing, setOrder, setError, setProcessing } =
-    useOrderStore();
+  const { order, setOrder, setError, setProcessing } = useOrderStore();
 
   /**
    * 주문 처리 함수
@@ -90,8 +89,6 @@ export function useOrder() {
   };
 
   return {
-    order,
-    isProcessing,
     handlePayment,
   };
 }
