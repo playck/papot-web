@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { useState } from "react";
 import { Menu, X, Search, ShoppingCart, User, LogOut } from "lucide-react";
 import { useAuth } from "@/shared/hooks/useAuth";
@@ -38,10 +39,12 @@ const Header = () => {
           {/* 로고 */}
           <div className="flex items-center">
             <Link href="/" className="flex items-center space-x-2">
-              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary-600 text-white">
-                <span className="text-lg font-bold">P</span>
-              </div>
-              <span className="text-xl font-bold text-foreground">Papot</span>
+              <Image
+                src="/images/papot-logo.png"
+                alt="Papot"
+                width={32}
+                height={32}
+              />
             </Link>
           </div>
 
