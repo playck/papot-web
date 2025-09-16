@@ -1,38 +1,38 @@
 "use client";
 
 import { useEffect } from "react";
-import { useParams } from "next/navigation";
+import { useRouter } from "next/navigation";
+import PageLoader from "@/shared/components/PageLoader";
+import PageError from "@/shared/components/PageError";
 import OrderItems from "@/feature/order/components/OrderItems";
 import OrderCustomer from "@/feature/order/components/OrderCustomer";
 import ShippingAddress from "@/feature/order/components/ShippingAddress";
 import OrderSideBar from "@/feature/order/components/OrderSidebar";
-import PageLoader from "@/shared/components/PageLoader";
-import PageError from "@/shared/components/PageError";
 import { useOrderStore } from "@/feature/order/store/order";
 
-export default function OrderDetailPage() {
-  const params = useParams();
-  const orderId = params.id as string;
-
+export default function NewOrderPage() {
+  const router = useRouter();
   const {
     order,
     isLoading,
     error,
     isProcessing,
     fetchOrder,
-    processPayment,
+    handlePayment,
     reset,
   } = useOrderStore();
 
   useEffect(() => {
-    if (orderId) {
-      fetchOrder(orderId);
-    }
+    const timer = setTimeout(() => {
+      if (!order) {
+        router.push("/");
+      }
+    }, 500);
 
     return () => {
-      reset();
+      clearTimeout(timer);
     };
-  }, [orderId, fetchOrder, reset]);
+  }, [order, router]);
 
   if (isLoading) {
     return (
@@ -64,7 +64,7 @@ export default function OrderDetailPage() {
           <div className="lg:col-span-1">
             <OrderSideBar
               summary={order.summary}
-              onProceedToPayment={processPayment}
+              onProceedToPayment={handlePayment}
               isProcessing={isProcessing}
             />
           </div>
