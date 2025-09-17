@@ -1,7 +1,8 @@
 "use client";
 
+import { Input, AddressSearch } from "@/shared/components";
 import { ShippingAddress as ShippingAddressType } from "@/shared/types/order";
-import { Input } from "@/shared/components";
+import type { AddressData } from "@/shared/components/AddressSearch";
 import { useOrderStore } from "@/feature/order/store/order";
 
 interface ShippingAddressProps {
@@ -20,6 +21,15 @@ export default function ShippingAddress({
     updateShippingAddress({
       ...shippingAddress,
       [field]: value,
+    });
+  };
+
+  const handleAddressSelect = (addressData: AddressData) => {
+    updateShippingAddress({
+      ...shippingAddress,
+      zipCode: addressData.zipCode,
+      address: addressData.address,
+      detailAddress: "",
     });
   };
 
@@ -54,24 +64,31 @@ export default function ShippingAddress({
           </div>
         </div>
 
-        <div className="grid grid-cols-4 gap-4">
-          <div className="col-span-1">
-            <Input
-              label="우편번호"
-              type="text"
-              value={shippingAddress.zipCode}
-              onChange={(e) => handleInputChange("zipCode", e.target.value)}
-              placeholder="12345"
-            />
-          </div>
-          <div className="col-span-3">
-            <Input
-              label="주소"
-              type="text"
-              value={shippingAddress.address}
-              onChange={(e) => handleInputChange("address", e.target.value)}
-              placeholder="주소를 입력하세요"
-            />
+        <div className="space-y-4">
+          <div className="grid grid-cols-4 gap-4">
+            <div className="col-span-1">
+              <Input
+                label="우편번호"
+                type="text"
+                value={shippingAddress.zipCode}
+                onChange={(e) => handleInputChange("zipCode", e.target.value)}
+                placeholder="12345"
+                readOnly
+              />
+            </div>
+            <div className="col-span-2">
+              <Input
+                label="주소"
+                type="text"
+                value={shippingAddress.address}
+                onChange={(e) => handleInputChange("address", e.target.value)}
+                placeholder="주소 찾기 버튼을 클릭해주세요"
+                readOnly
+              />
+            </div>
+            <div className="col-span-1 flex items-end">
+              <AddressSearch onAddressSelect={handleAddressSelect} />
+            </div>
           </div>
         </div>
 

@@ -1,3 +1,4 @@
+export { default as AddressSearch } from "./AddressSearch";
 export { default as Header } from "./layout/Header";
 export { default as Counter } from "./Counter";
 export { default as InfoBox } from "./InfoBox";

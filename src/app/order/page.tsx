@@ -41,7 +41,6 @@ export default function OrderPage() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="mb-8">
           <h1 className="text-2xl font-bold text-neutral-900">주문/결제</h1>
-          <p className="text-neutral-600 mt-2">주문번호: {order.orderNumber}</p>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
