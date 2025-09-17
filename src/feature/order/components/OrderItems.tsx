@@ -11,9 +11,9 @@ interface OrderItemsProps {
 export default function OrderItems({ items }: OrderItemsProps) {
   return (
     <div className="bg-white rounded-lg border border-neutral-200 p-6">
-      <h2 className="text-lg font-semibold text-neutral-900 mb-4">주문상품</h2>
+      <h2 className="text-lg font-semibold text-neutral-900 mb-2">주문상품</h2>
 
-      <div className="space-y-3">
+      <div>
         {items.map((item) => (
           <div key={item.id} className="flex gap-3 py-3">
             <div className="flex-shrink-0">
@@ -54,7 +54,7 @@ export default function OrderItems({ items }: OrderItemsProps) {
         ))}
       </div>
 
-      <div className="mt-4 pt-4 border-t border-neutral-200">
+      <div className="mt-2 pt-4 border-t border-neutral-200">
         <div className="flex justify-end">
           <div className="text-lg font-semibold text-neutral-900">
             <span className="text-neutral-700">총 </span>

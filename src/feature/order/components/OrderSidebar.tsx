@@ -2,18 +2,19 @@
 
 import { OrderSideBar as OrderSideBarType } from "@/shared/types/order";
 import { formatKoreanPrice } from "@/shared/utils/price";
+import { useOrder } from "../hooks/useOrder";
 
 interface OrderSideBarProps {
   summary: OrderSideBarType;
   isProcessing?: boolean;
-  onProceedToPayment?: () => void;
 }
 
 export default function OrderSideBar({
   summary,
   isProcessing = false,
-  onProceedToPayment,
 }: OrderSideBarProps) {
+  const { handlePayment } = useOrder();
+
   return (
     <div className="sticky top-20">
       <div className="bg-white rounded-lg border border-neutral-200 p-6">
@@ -80,9 +81,9 @@ export default function OrderSideBar({
           </p>
         </div>
 
-        {onProceedToPayment && (
+        {handlePayment && (
           <button
-            onClick={onProceedToPayment}
+            onClick={handlePayment}
             disabled={isProcessing}
             className="w-full bg-primary-600 hover:bg-primary-700 disabled:bg-neutral-300 disabled:cursor-not-allowed text-white font-semibold py-4 rounded-lg transition-colors cursor-pointer"
           >

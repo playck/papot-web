@@ -1,8 +1,10 @@
 "use client";
 
+import { useEffect } from "react";
 import { OrderCustomer as OrderCustomerType } from "@/shared/types/order";
 import { Input } from "@/shared/components";
 import { useOrderStore } from "@/feature/order/store/order";
+import { useAuth, useUserProfile } from "@/shared/hooks/useAuth";
 
 interface OrderCustomerProps {
   customer: OrderCustomerType;
@@ -10,6 +12,19 @@ interface OrderCustomerProps {
 
 export default function OrderCustomer({ customer }: OrderCustomerProps) {
   const { updateCustomer } = useOrderStore();
+  const { user } = useAuth();
+  const { data: userProfile } = useUserProfile(user?.id);
+
+  // 사용자 정보로 자동 채우기
+  useEffect(() => {
+    if (userProfile && !customer.email) {
+      updateCustomer({
+        name: userProfile.user_name || "",
+        email: userProfile.email || "",
+        phone: userProfile.phone || "",
+      });
+    }
+  }, [userProfile, customer.email, updateCustomer]);
 
   const handleInputChange = (field: keyof OrderCustomerType, value: string) => {
     updateCustomer({

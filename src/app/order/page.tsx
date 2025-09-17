@@ -10,17 +10,9 @@ import ShippingAddress from "@/feature/order/components/ShippingAddress";
 import OrderSideBar from "@/feature/order/components/OrderSidebar";
 import { useOrderStore } from "@/feature/order/store/order";
 
-export default function NewOrderPage() {
+export default function OrderPage() {
   const router = useRouter();
-  const {
-    order,
-    isLoading,
-    error,
-    isProcessing,
-    fetchOrder,
-    handlePayment,
-    reset,
-  } = useOrderStore();
+  const { order, isLoading, error, isProcessing } = useOrderStore();
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -62,11 +54,7 @@ export default function NewOrderPage() {
 
           {/* 오른쪽 사이드 - 결제 요약 */}
           <div className="lg:col-span-1">
-            <OrderSideBar
-              summary={order.summary}
-              onProceedToPayment={handlePayment}
-              isProcessing={isProcessing}
-            />
+            <OrderSideBar summary={order.summary} isProcessing={isProcessing} />
           </div>
         </div>
       </div>
