@@ -58,7 +58,6 @@ export default function ProductActions({
     );
   }
 
-  // 구매 섹션 렌더링
   return (
     <div className="space-y-4 pt-6 border-t border-neutral-200">
       <div className="flex items-center justify-between">

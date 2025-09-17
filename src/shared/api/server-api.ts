@@ -5,11 +5,6 @@ import {
   ProductListResponse,
   convertProductDataToClient,
 } from "../types/product";
-import {
-  ServerOrderData,
-  ServerOrderItemData,
-  CreateOrderResponse,
-} from "../types/order";
 
 // 상품 목록 조회
 export async function getProducts(
@@ -110,53 +105,4 @@ export async function getCategories(): Promise<string[]> {
 
   const categories = [...new Set(data.map((item) => item.category))].sort();
   return categories;
-}
-
-// 주문 생성
-export async function createOrder(
-  orderData: ServerOrderData,
-  orderItemsData: ServerOrderItemData[]
-): Promise<CreateOrderResponse> {
-  const supabase = await createClient();
-
-  try {
-    const { data: orderResult, error: orderError } = await supabase
-      .from("orders")
-      .insert(orderData)
-      .select("id")
-      .single();
-
-    if (orderError) {
-      return { success: false, error: orderError.message };
-    }
-
-    const orderId = orderResult.id;
-
-    // 주문 아이템들에 orderId 추가
-    const itemsWithOrderId = orderItemsData.map((item) => ({
-      ...item,
-      order_id: orderId,
-    }));
-
-    const { error: itemsError } = await supabase
-      .from("order_items")
-      .insert(itemsWithOrderId);
-
-    if (itemsError) {
-      // 주문 생성은 성공했지만 아이템 생성 실패 시 주문 삭제
-      await supabase.from("orders").delete().eq("id", orderId);
-
-      return { success: false, error: itemsError.message };
-    }
-
-    return { success: true, orderId };
-  } catch (error) {
-    return {
-      success: false,
-      error:
-        error instanceof Error
-          ? error.message
-          : "주문 생성 중 오류가 발생했습니다.",
-    };
-  }
 }

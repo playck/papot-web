@@ -26,9 +26,9 @@ export function usePurchase() {
     }
 
     const orderData = {
-      orderNumber: `${dayjs().format("YYYYMMDD")}${String(
-        Math.floor(Math.random() * 100)
-      ).padStart(2, "0")}`,
+      orderNumber: `ORD-${dayjs().format("YYYYMMDD")}-${Date.now()}-${String(
+        Math.floor(Math.random() * 1000)
+      ).padStart(3, "0")}`,
       items: [item],
       totalAmount: item.price * item.quantity,
       userId: user.id,

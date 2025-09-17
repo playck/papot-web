@@ -1,7 +1,7 @@
+import { Order } from "@/shared/types/order";
+import { createOrder } from "@/shared/api/client-api";
 import { useOrderStore } from "../store/order";
 import { OrderAdapter } from "../adapters/OrderAdapter";
-import { createOrder } from "@/shared/api/server-api";
-import { Order } from "@/shared/types/order";
 
 // 주문 상태 한글 변환 함수
 export function getOrderStatusText(status: Order["status"]): string {

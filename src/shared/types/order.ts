@@ -89,9 +89,6 @@ export interface CreateOrderRequest {
 export interface ServerOrderData {
   order_number: string;
   customer_id: string;
-  customer_name: string;
-  customer_email: string;
-  customer_phone: string;
   recipient_name: string;
   recipient_phone: string;
   shipping_address: string;

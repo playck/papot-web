@@ -78,27 +78,17 @@ export class OrderAdapter {
     return {
       order_number: order.orderNumber,
       customer_id: order.customerId,
-
-      // 고객 정보
-      customer_name: order.customer.name,
-      customer_email: order.customer.email,
-      customer_phone: order.customer.phone,
-
-      // 배송 주소
       recipient_name: order.shippingAddress.recipientName,
       recipient_phone: order.shippingAddress.phone,
       shipping_address: order.shippingAddress.address,
       shipping_detail_address: order.shippingAddress.detailAddress,
       shipping_zip_code: order.shippingAddress.zipCode,
       delivery_request: order.shippingAddress.deliveryRequest,
-
-      // 주문 요약
       total_product_price: order.summary.totalProductPrice,
       shipping_fee: order.summary.shippingFee,
       coupon_discount: order.summary.couponDiscount,
       point_discount: order.summary.pointDiscount,
       final_price: order.summary.finalPrice,
-
       status: "pending" as const,
     };
   }
