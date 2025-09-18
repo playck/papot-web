@@ -6,10 +6,7 @@ const generateCartItemId = (
   productId: string,
   options?: CartItem["selectedOptions"]
 ) => {
-  const optionsKey = options
-    ? `_${options.color || ""}_${options.size || ""}`
-    : "";
-  return `${productId}${optionsKey}`;
+  return `${productId}`;
 };
 
 export const useCartStore = create<CartStore>()(

@@ -266,3 +266,255 @@ export async function createOrder(
     };
   }
 }
+
+// =====================================================
+// 장바구니 API 함수들
+// =====================================================
+
+import {
+  CreateCartData,
+  CreateCartItemData,
+  DatabaseCart,
+  DatabaseCartItem,
+} from "../types/cart";
+import { createClient } from "@/services/supabase/server";
+
+/**
+ * 사용자의 장바구니 조회
+ */
+export async function getUserCart(
+  userId: string
+): Promise<DatabaseCart | null> {
+  const supabase = await createClient();
+
+  const { data, error } = await supabase
+    .from("carts")
+    .select("*")
+    .eq("user_id", userId)
+    .single();
+
+  if (error) {
+    console.error("장바구니 조회 실패:", error);
+    return null;
+  }
+
+  return data;
+}
+
+/**
+ * 장바구니 생성
+ */
+export async function createUserCart(
+  userId: string
+): Promise<DatabaseCart | null> {
+  const supabase = await createClient();
+
+  const cartData: CreateCartData = {
+    user_id: userId,
+    total_amount: 0,
+    total_quantity: 0,
+  };
+
+  const { data, error } = await supabase
+    .from("carts")
+    .insert(cartData)
+    .select()
+    .single();
+
+  if (error) {
+    console.error("장바구니 생성 실패:", error);
+    return null;
+  }
+
+  return data;
+}
+
+/**
+ * 장바구니 아이템들 조회
+ */
+export async function getCartItems(
+  cartId: string
+): Promise<DatabaseCartItem[]> {
+  const supabase = await createClient();
+
+  const { data, error } = await supabase
+    .from("cart_items")
+    .select("*")
+    .eq("cart_id", cartId);
+
+  if (error) {
+    console.error("장바구니 아이템 조회 실패:", error);
+    return [];
+  }
+
+  return data || [];
+}
+
+/**
+ * 장바구니에 아이템 추가
+ */
+export async function addItemToCart(
+  cartId: string,
+  productId: string,
+  productName: string,
+  productImage: string | null,
+  unitPrice: number,
+  quantity: number
+): Promise<DatabaseCartItem | null> {
+  const supabase = await createClient();
+
+  const { data: existingItem } = await supabase
+    .from("cart_items")
+    .select("*")
+    .eq("cart_id", cartId)
+    .eq("product_id", productId)
+    .single();
+
+  if (existingItem) {
+    return await updateCartItemQuantity(
+      existingItem.id,
+      existingItem.quantity + quantity
+    );
+  }
+
+  // 새 아이템 추가
+  const itemData: CreateCartItemData = {
+    cart_id: cartId,
+    product_id: productId,
+    product_name: productName,
+    product_image: productImage,
+    quantity,
+    unit_price: unitPrice,
+    total_price: unitPrice * quantity,
+  };
+
+  const { data, error } = await supabase
+    .from("cart_items")
+    .insert(itemData)
+    .select()
+    .single();
+
+  if (error) {
+    console.error("장바구니 아이템 추가 실패:", error);
+    return null;
+  }
+
+  await updateCartTotals(cartId);
+
+  return data;
+}
+
+/**
+ * 장바구니 아이템 수량 업데이트
+ */
+export async function updateCartItemQuantity(
+  itemId: string,
+  quantity: number
+): Promise<DatabaseCartItem | null> {
+  const supabase = await createClient();
+
+  if (quantity <= 0) {
+    await removeCartItem(itemId);
+    return null;
+  }
+
+  const { data: item } = await supabase
+    .from("cart_items")
+    .select("*")
+    .eq("id", itemId)
+    .single();
+
+  if (!item) return null;
+
+  const { data, error } = await supabase
+    .from("cart_items")
+    .update({
+      quantity,
+      total_price: item.unit_price * quantity,
+    })
+    .eq("id", itemId)
+    .select()
+    .single();
+
+  if (error) {
+    console.error("장바구니 아이템 수량 업데이트 실패:", error);
+    return null;
+  }
+
+  await updateCartTotals(item.cart_id);
+
+  return data;
+}
+
+/**
+ * 장바구니 아이템 삭제
+ */
+export async function removeCartItem(itemId: string): Promise<boolean> {
+  const supabase = await createClient();
+
+  const { data: item } = await supabase
+    .from("cart_items")
+    .select("cart_id")
+    .eq("id", itemId)
+    .single();
+
+  const { error } = await supabase.from("cart_items").delete().eq("id", itemId);
+
+  if (error) {
+    console.error("장바구니 아이템 삭제 실패:", error);
+    return false;
+  }
+
+  if (item) {
+    await updateCartTotals(item.cart_id);
+  }
+
+  return true;
+}
+
+/**
+ * 장바구니 비우기
+ */
+export async function clearCart(cartId: string): Promise<boolean> {
+  const supabase = await createClient();
+
+  const { error } = await supabase
+    .from("cart_items")
+    .delete()
+    .eq("cart_id", cartId);
+
+  if (error) {
+    console.error("장바구니 비우기 실패:", error);
+    return false;
+  }
+
+  await updateCartTotals(cartId);
+
+  return true;
+}
+
+/**
+ * 장바구니 총계 업데이트
+ */
+async function updateCartTotals(cartId: string): Promise<void> {
+  const supabase = await createClient();
+
+  // 장바구니 아이템들의 총합 계산
+  const { data: items } = await supabase
+    .from("cart_items")
+    .select("quantity, total_price")
+    .eq("cart_id", cartId);
+
+  const totalQuantity =
+    items?.reduce((sum, item) => sum + item.quantity, 0) || 0;
+  const totalAmount =
+    items?.reduce((sum, item) => sum + item.total_price, 0) || 0;
+
+  await supabase
+    .from("carts")
+    .update({
+      total_quantity: totalQuantity,
+      total_amount: totalAmount,
+    })
+    .eq("id", cartId);
+}
