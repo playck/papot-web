@@ -1,4 +1,8 @@
+"use client";
+
+import { useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { formatKoreanPrice } from "@/shared/utils/price";
 import { useCartStore } from "@/feature/cart/store/cart";
 import { Counter } from "@/shared/components";
@@ -10,6 +14,7 @@ interface CartItemProps {
 }
 
 export default function CartItem({ item, isLast = false }: CartItemProps) {
+  const [imageError, setImageError] = useState(false);
   const { updateQuantity, removeItem } = useCartStore();
 
   const handleQuantityChange = (newQuantity: number) => {
@@ -23,13 +28,19 @@ export default function CartItem({ item, isLast = false }: CartItemProps) {
         {/* 상품 이미지 */}
         <Link
           href={`/product/detail/${item.productId}`}
-          className="w-20 h-20 bg-gray-100 rounded-lg overflow-hidden flex-shrink-0 hover:opacity-80 transition-opacity"
+          className="w-20 h-20 bg-gray-100 rounded-lg overflow-hidden flex-shrink-0 hover:opacity-80 transition-opacity relative"
         >
-          {item.imageUrl ? (
-            <img
+          {item.imageUrl && !imageError ? (
+            <Image
               src={item.imageUrl}
               alt={item.name}
-              className="w-full h-full object-cover"
+              fill
+              className="object-cover"
+              sizes="80px"
+              onError={() => {
+                console.warn(`장바구니 이미지 로드 실패: ${item.imageUrl}`);
+                setImageError(true);
+              }}
             />
           ) : (
             <div className="w-full h-full flex items-center justify-center text-gray-400">
@@ -81,13 +92,21 @@ export default function CartItem({ item, isLast = false }: CartItemProps) {
         <div className="flex items-start gap-3">
           <Link
             href={`/product/detail/${item.productId}`}
-            className="w-16 h-16 bg-gray-100 rounded-lg overflow-hidden flex-shrink-0 hover:opacity-80 transition-opacity"
+            className="w-16 h-16 bg-gray-100 rounded-lg overflow-hidden flex-shrink-0 hover:opacity-80 transition-opacity relative"
           >
-            {item.imageUrl ? (
-              <img
+            {item.imageUrl && !imageError ? (
+              <Image
                 src={item.imageUrl}
                 alt={item.name}
-                className="w-full h-full object-cover"
+                fill
+                className="object-cover"
+                sizes="64px"
+                onError={() => {
+                  console.warn(
+                    `장바구니 모바일 이미지 로드 실패: ${item.imageUrl}`
+                  );
+                  setImageError(true);
+                }}
               />
             ) : (
               <div className="w-full h-full flex items-center justify-center text-gray-400 text-xs">
