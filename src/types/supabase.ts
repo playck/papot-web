@@ -121,6 +121,137 @@ export type Database = {
         };
         Relationships: [];
       };
+      order_items: {
+        Row: {
+          created_at: string;
+          id: string;
+          order_id: string;
+          product_description: string | null;
+          product_discount_rate: number | null;
+          product_id: string;
+          product_image_url: string | null;
+          product_name: string;
+          product_price: number;
+          quantity: number;
+          total_price: number;
+          unit_price: number;
+          updated_at: string;
+        };
+        Insert: {
+          created_at?: string;
+          id?: string;
+          order_id: string;
+          product_description?: string | null;
+          product_discount_rate?: number | null;
+          product_id: string;
+          product_image_url?: string | null;
+          product_name: string;
+          product_price: number;
+          quantity: number;
+          total_price: number;
+          unit_price: number;
+          updated_at?: string;
+        };
+        Update: {
+          created_at?: string;
+          id?: string;
+          order_id?: string;
+          product_description?: string | null;
+          product_discount_rate?: number | null;
+          product_id?: string;
+          product_image_url?: string | null;
+          product_name?: string;
+          product_price?: number;
+          quantity?: number;
+          total_price?: number;
+          unit_price?: number;
+          updated_at?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "fk_order_items_order";
+            columns: ["order_id"];
+            isOneToOne: false;
+            referencedRelation: "orders";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "fk_order_items_product";
+            columns: ["product_id"];
+            isOneToOne: false;
+            referencedRelation: "products";
+            referencedColumns: ["id"];
+          }
+        ];
+      };
+      orders: {
+        Row: {
+          coupon_discount: number;
+          created_at: string;
+          customer_id: string;
+          delivery_request: string | null;
+          final_price: number;
+          id: string;
+          order_number: string;
+          point_discount: number;
+          recipient_name: string;
+          recipient_phone: string;
+          shipping_address: string;
+          shipping_detail_address: string | null;
+          shipping_fee: number;
+          shipping_zip_code: string;
+          status: string;
+          total_product_price: number;
+          updated_at: string;
+        };
+        Insert: {
+          coupon_discount?: number;
+          created_at?: string;
+          customer_id: string;
+          delivery_request?: string | null;
+          final_price?: number;
+          id?: string;
+          order_number: string;
+          point_discount?: number;
+          recipient_name: string;
+          recipient_phone: string;
+          shipping_address: string;
+          shipping_detail_address?: string | null;
+          shipping_fee?: number;
+          shipping_zip_code: string;
+          status?: string;
+          total_product_price?: number;
+          updated_at?: string;
+        };
+        Update: {
+          coupon_discount?: number;
+          created_at?: string;
+          customer_id?: string;
+          delivery_request?: string | null;
+          final_price?: number;
+          id?: string;
+          order_number?: string;
+          point_discount?: number;
+          recipient_name?: string;
+          recipient_phone?: string;
+          shipping_address?: string;
+          shipping_detail_address?: string | null;
+          shipping_fee?: number;
+          shipping_zip_code?: string;
+          status?: string;
+          total_product_price?: number;
+          updated_at?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "fk_orders_customer";
+            columns: ["customer_id"];
+            isOneToOne: false;
+            referencedRelation: "profiles";
+            referencedColumns: ["id"];
+          }
+        ];
+      };
       product_images: {
         Row: {
           created_at: string | null;
@@ -220,21 +351,74 @@ export type Database = {
           created_at: string;
           email: string;
           id: string;
+          phone: string | null;
           user_name: string | null;
         };
         Insert: {
           created_at?: string;
           email: string;
           id: string;
+          phone?: string | null;
           user_name?: string | null;
         };
         Update: {
           created_at?: string;
           email?: string;
           id?: string;
+          phone?: string | null;
           user_name?: string | null;
         };
         Relationships: [];
+      };
+      user_addresses: {
+        Row: {
+          address: string;
+          address_name: string | null;
+          created_at: string;
+          detail_address: string | null;
+          id: string;
+          is_default: boolean | null;
+          phone: string;
+          recipient_name: string;
+          updated_at: string;
+          user_id: string;
+          zip_code: string;
+        };
+        Insert: {
+          address: string;
+          address_name?: string | null;
+          created_at?: string;
+          detail_address?: string | null;
+          id?: string;
+          is_default?: boolean | null;
+          phone: string;
+          recipient_name: string;
+          updated_at?: string;
+          user_id: string;
+          zip_code: string;
+        };
+        Update: {
+          address?: string;
+          address_name?: string | null;
+          created_at?: string;
+          detail_address?: string | null;
+          id?: string;
+          is_default?: boolean | null;
+          phone?: string;
+          recipient_name?: string;
+          updated_at?: string;
+          user_id?: string;
+          zip_code?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "fk_user_addresses_user";
+            columns: ["user_id"];
+            isOneToOne: false;
+            referencedRelation: "profiles";
+            referencedColumns: ["id"];
+          }
+        ];
       };
     };
     Views: {
@@ -382,3 +566,46 @@ export const Constants = {
 export type Product = Database["public"]["Tables"]["products"]["Row"];
 export type ProductInsert = Database["public"]["Tables"]["products"]["Insert"];
 export type ProductUpdate = Database["public"]["Tables"]["products"]["Update"];
+
+export type Cart = Database["public"]["Tables"]["carts"]["Row"];
+export type CartInsert = Database["public"]["Tables"]["carts"]["Insert"];
+export type CartUpdate = Database["public"]["Tables"]["carts"]["Update"];
+
+export type CartItem = Database["public"]["Tables"]["cart_items"]["Row"];
+export type CartItemInsert =
+  Database["public"]["Tables"]["cart_items"]["Insert"];
+export type CartItemUpdate =
+  Database["public"]["Tables"]["cart_items"]["Update"];
+
+export type Order = Database["public"]["Tables"]["orders"]["Row"];
+export type OrderInsert = Database["public"]["Tables"]["orders"]["Insert"];
+export type OrderUpdate = Database["public"]["Tables"]["orders"]["Update"];
+
+export type OrderItem = Database["public"]["Tables"]["order_items"]["Row"];
+export type OrderItemInsert =
+  Database["public"]["Tables"]["order_items"]["Insert"];
+export type OrderItemUpdate =
+  Database["public"]["Tables"]["order_items"]["Update"];
+
+export type Profile = Database["public"]["Tables"]["profiles"]["Row"];
+export type ProfileInsert = Database["public"]["Tables"]["profiles"]["Insert"];
+export type ProfileUpdate = Database["public"]["Tables"]["profiles"]["Update"];
+
+export type UserAddress = Database["public"]["Tables"]["user_addresses"]["Row"];
+export type UserAddressInsert =
+  Database["public"]["Tables"]["user_addresses"]["Insert"];
+export type UserAddressUpdate =
+  Database["public"]["Tables"]["user_addresses"]["Update"];
+
+export type Category = Database["public"]["Tables"]["categories"]["Row"];
+export type CategoryInsert =
+  Database["public"]["Tables"]["categories"]["Insert"];
+export type CategoryUpdate =
+  Database["public"]["Tables"]["categories"]["Update"];
+
+export type ProductImage =
+  Database["public"]["Tables"]["product_images"]["Row"];
+export type ProductImageInsert =
+  Database["public"]["Tables"]["product_images"]["Insert"];
+export type ProductImageUpdate =
+  Database["public"]["Tables"]["product_images"]["Update"];
