@@ -1,7 +1,7 @@
 "use client";
 
 import { ShoppingCart } from "lucide-react";
-import { useCartStore } from "@/feature/cart/store/cart";
+import { useCart } from "@/feature/cart/hooks";
 
 interface AddToCartButtonProps {
   productId?: string;
@@ -20,7 +20,7 @@ export default function AddToCartButton({
   quantity,
   className = "",
 }: AddToCartButtonProps) {
-  const { addItem } = useCartStore();
+  const { handleAddItemToCart } = useCart();
 
   const handleAddToCart = () => {
     if (!productId) {
@@ -28,7 +28,7 @@ export default function AddToCartButton({
       return;
     }
 
-    addItem({
+    handleAddItemToCart("", {
       productId,
       name: title,
       price,

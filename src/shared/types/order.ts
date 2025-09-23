@@ -1,6 +1,12 @@
 import { Product } from "./product";
+import {
+  Order as DbOrder,
+  OrderItem as DbOrderItem,
+  OrderInsert,
+  OrderItemInsert,
+} from "../../types/supabase";
 
-export interface OrderItem {
+export interface ClientOrderItem {
   id: string;
   productId: string;
   product: Product;
@@ -34,12 +40,12 @@ export interface OrderSummary {
 
 export type OrderSideBar = OrderSummary;
 
-export interface Order {
+export interface ClientOrder {
   id: string;
   orderNumber: string;
   customerId: string;
   customer: OrderCustomer;
-  items: OrderItem[];
+  items: ClientOrderItem[];
   shippingAddress: ShippingAddress;
   summary: OrderSummary;
   status:
@@ -81,36 +87,10 @@ export interface CreateOrderResponse {
 
 export interface CreateOrderRequest {
   customer: OrderCustomer;
-  items: Omit<OrderItem, "id" | "product">[];
+  items: Omit<ClientOrderItem, "id" | "product">[];
   shippingAddress: ShippingAddress;
 }
 
-// 서버로 전송할 주문 데이터 타입
-export interface ServerOrderData {
-  order_number: string;
-  customer_id: string;
-  recipient_name: string;
-  recipient_phone: string;
-  shipping_address: string;
-  shipping_detail_address: string;
-  shipping_zip_code: string;
-  delivery_request?: string;
-  total_product_price: number;
-  shipping_fee: number;
-  coupon_discount: number;
-  point_discount: number;
-  final_price: number;
-  status: "pending";
-}
+export type ServerOrderData = OrderInsert;
 
-// 서버로 전송할 주문 아이템 데이터 타입
-export interface ServerOrderItemData {
-  order_id: string;
-  product_id: string;
-  product_name: string;
-  product_price: number;
-  product_image_url?: string;
-  quantity: number;
-  unit_price: number;
-  total_price: number;
-}
+export type ServerOrderItemData = OrderItemInsert;

@@ -6,10 +6,10 @@ import {
   EmptyCart,
   MobileCartSummary,
 } from "@/feature/cart/components";
-import { useCartStore } from "@/feature/cart/store/cart";
+import { useCart } from "@/feature/cart/hooks";
 
 export default function CartPage() {
-  const { items, clearCart } = useCartStore();
+  const { items, handleClearCart, cartId } = useCart();
 
   if (items.length === 0) {
     return <EmptyCart />;
@@ -31,7 +31,7 @@ export default function CartPage() {
                   상품 목록 ({items.length}개)
                 </h2>
                 <button
-                  onClick={clearCart}
+                  onClick={() => cartId && handleClearCart(cartId)}
                   className="text-sm text-gray-500 hover:text-red-500 transition-colors cursor-pointer"
                 >
                   전체 삭제

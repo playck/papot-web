@@ -4,7 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { formatKoreanPrice } from "@/shared/utils/price";
-import { useCartStore } from "@/feature/cart/store/cart";
+import { useCart } from "@/feature/cart/hooks";
 import { Counter } from "@/shared/components";
 import type { CartItem as CartItemType } from "@/shared/types/cart";
 
@@ -15,10 +15,10 @@ interface CartItemProps {
 
 export default function CartItem({ item, isLast = false }: CartItemProps) {
   const [imageError, setImageError] = useState(false);
-  const { updateQuantity, removeItem } = useCartStore();
+  const { handleUpdateQuantity, handleRemoveItem } = useCart();
 
   const handleQuantityChange = (newQuantity: number) => {
-    updateQuantity(item.id, newQuantity);
+    handleUpdateQuantity(item.id, newQuantity);
   };
 
   return (
@@ -66,7 +66,7 @@ export default function CartItem({ item, isLast = false }: CartItemProps) {
         <div className="flex flex-col items-end gap-3">
           {/* 삭제 버튼 */}
           <button
-            onClick={() => removeItem(item.id)}
+            onClick={() => handleRemoveItem(item.id)}
             className="text-sm text-gray-500 hover:text-red-500 transition-colors cursor-pointer"
           >
             삭제
@@ -130,7 +130,7 @@ export default function CartItem({ item, isLast = false }: CartItemProps) {
           </div>
 
           <button
-            onClick={() => removeItem(item.id)}
+            onClick={() => handleRemoveItem(item.id)}
             className="text-xs text-gray-500 hover:text-red-500 transition-colors cursor-pointer p-1"
           >
             삭제

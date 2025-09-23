@@ -6,7 +6,7 @@ import { useState } from "react";
 import { Menu, X, Search, ShoppingCart, User, LogOut } from "lucide-react";
 import { useAuth } from "@/shared/hooks/useAuth";
 import { signOut } from "@/app/(auth)/services/api";
-import { useCartStore } from "@/feature/cart/store/cart";
+import { useCart } from "@/feature/cart/hooks";
 
 const menuItems = [
   { name: "홈", href: "/" },
@@ -21,7 +21,7 @@ const Header = () => {
   const { user, loading } = useAuth();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
-  const { totalItems } = useCartStore();
+  const { totalItems } = useCart();
 
   const handleSignOut = async () => {
     try {

@@ -1,7 +1,7 @@
 "use client";
 
 import { ShoppingCart } from "lucide-react";
-import { useCartStore } from "@/feature/cart/store/cart";
+import { useCart } from "@/feature/cart/hooks";
 import { ProductDetailInfo, ProductImageWrapper } from "./index";
 
 interface MobileProductDetailViewProps {
@@ -23,7 +23,7 @@ export default function MobileProductDetailView({
   product,
   productId,
 }: MobileProductDetailViewProps) {
-  const { addItem } = useCartStore();
+  const { handleAddItemToCart } = useCart();
 
   const handleAddToCart = () => {
     if (!productId) {
@@ -31,7 +31,7 @@ export default function MobileProductDetailView({
       return;
     }
 
-    addItem({
+    handleAddItemToCart("", {
       productId,
       name: product.name,
       price: product.discountedPrice || product.price,

@@ -277,7 +277,7 @@ import {
   DatabaseCart,
   DatabaseCartItem,
 } from "../types/cart";
-import { createClient } from "@/services/supabase/server";
+import { supabase as supabaseClient } from "@/services/supabase/client";
 
 /**
  * 사용자의 장바구니 조회
@@ -285,7 +285,7 @@ import { createClient } from "@/services/supabase/server";
 export async function getUserCart(
   userId: string
 ): Promise<DatabaseCart | null> {
-  const supabase = await createClient();
+  const supabase = supabaseClient;
 
   const { data, error } = await supabase
     .from("carts")
@@ -307,7 +307,7 @@ export async function getUserCart(
 export async function createUserCart(
   userId: string
 ): Promise<DatabaseCart | null> {
-  const supabase = await createClient();
+  const supabase = supabaseClient;
 
   const cartData: CreateCartData = {
     user_id: userId,
@@ -335,7 +335,7 @@ export async function createUserCart(
 export async function getCartItems(
   cartId: string
 ): Promise<DatabaseCartItem[]> {
-  const supabase = await createClient();
+  const supabase = supabaseClient;
 
   const { data, error } = await supabase
     .from("cart_items")
@@ -361,7 +361,7 @@ export async function addItemToCart(
   unitPrice: number,
   quantity: number
 ): Promise<DatabaseCartItem | null> {
-  const supabase = await createClient();
+  const supabase = supabaseClient;
 
   const { data: existingItem } = await supabase
     .from("cart_items")
@@ -411,7 +411,7 @@ export async function updateCartItemQuantity(
   itemId: string,
   quantity: number
 ): Promise<DatabaseCartItem | null> {
-  const supabase = await createClient();
+  const supabase = supabaseClient;
 
   if (quantity <= 0) {
     await removeCartItem(itemId);
@@ -450,7 +450,7 @@ export async function updateCartItemQuantity(
  * 장바구니 아이템 삭제
  */
 export async function removeCartItem(itemId: string): Promise<boolean> {
-  const supabase = await createClient();
+  const supabase = supabaseClient;
 
   const { data: item } = await supabase
     .from("cart_items")
@@ -476,7 +476,7 @@ export async function removeCartItem(itemId: string): Promise<boolean> {
  * 장바구니 비우기
  */
 export async function clearCart(cartId: string): Promise<boolean> {
-  const supabase = await createClient();
+  const supabase = supabaseClient;
 
   const { error } = await supabase
     .from("cart_items")
@@ -497,7 +497,7 @@ export async function clearCart(cartId: string): Promise<boolean> {
  * 장바구니 총계 업데이트
  */
 async function updateCartTotals(cartId: string): Promise<void> {
-  const supabase = await createClient();
+  const supabase = supabaseClient;
 
   // 장바구니 아이템들의 총합 계산
   const { data: items } = await supabase
