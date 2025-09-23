@@ -40,15 +40,13 @@ export default function useCart() {
     queryFn: async () => {
       if (!user?.id) return null;
 
-      let cart = await getUserCart(user.id);
-
-      // 장바구니가 없으면 생성
-      if (!cart) {
-        cart = await createUserCart(user.id);
-      }
+      const cart = await getUserCart(user.id);
 
       if (!cart) {
-        throw new Error("장바구니 생성 실패");
+        return {
+          cart: null,
+          items: [],
+        };
       }
 
       // 장바구니 아이템들 조회

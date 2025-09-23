@@ -291,14 +291,14 @@ export async function getUserCart(
     .from("carts")
     .select("*")
     .eq("user_id", userId)
-    .single();
+    .maybeSingle();
 
   if (error) {
     console.error("장바구니 조회 실패:", error);
     return null;
   }
 
-  return data;
+  return data; // 없으면 null, 있으면 데이터 반환
 }
 
 /**
