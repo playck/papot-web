@@ -27,11 +27,6 @@ const ProductEmpty = ({
       {/* 빈 상태 메시지 */}
       <div className="mb-8">
         <h2 className="text-2xl font-bold text-foreground mb-4">{title}</h2>
-        <div className="w-16 h-1 bg-gray-300 mx-auto rounded-full mb-4"></div>
-        <p className="text-gray-600 mb-2">{message}</p>
-        <p className="text-sm text-gray-500">
-          다른 카테고리를 둘러보시거나 홈페이지로 돌아가 주세요.
-        </p>
       </div>
 
       {/* 액션 버튼 */}
@@ -62,23 +57,11 @@ const ProductEmpty = ({
       </div>
 
       {/* 추천 액션 */}
-      <div className="mt-12 p-6 bg-primary-50 rounded-lg border border-primary-200">
-        <h3 className="text-sm font-semibold text-primary-700 mb-3">
+      <div className="mt-12 mx-auto w-fit px-16 py-6 bg-primary-50 rounded-lg border border-primary-200">
+        <h3 className="text-sm font-semibold text-primary-700 mb-3 text-center">
           다른 카테고리도 둘러보세요:
         </h3>
         <div className="flex flex-wrap gap-2 justify-center">
-          <Link
-            href="/product/category/plants"
-            className="px-3 py-1 text-xs bg-white text-primary-600 rounded-full border border-primary-300 hover:bg-primary-100 transition-colors"
-          >
-            🌱 식물
-          </Link>
-          <Link
-            href="/product/category/flowers"
-            className="px-3 py-1 text-xs bg-white text-primary-600 rounded-full border border-primary-300 hover:bg-primary-100 transition-colors"
-          >
-            🌸 꽃
-          </Link>
           <Link
             href="/product/category/pots"
             className="px-3 py-1 text-xs bg-white text-primary-600 rounded-full border border-primary-300 hover:bg-primary-100 transition-colors"
@@ -86,10 +69,10 @@ const ProductEmpty = ({
             🪴 화분
           </Link>
           <Link
-            href="/product/category/gardening"
+            href="/product/category/ceramic"
             className="px-3 py-1 text-xs bg-white text-primary-600 rounded-full border border-primary-300 hover:bg-primary-100 transition-colors"
           >
-            🌿 가드닝
+            🥣 그릇
           </Link>
         </div>
       </div>

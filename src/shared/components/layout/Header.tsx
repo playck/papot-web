@@ -10,11 +10,8 @@ import { useCart } from "@/feature/cart/hooks";
 
 const menuItems = [
   { name: "홈", href: "/" },
-  { name: "식물", href: "/product/category/plants", id: "1" },
-  { name: "꽃", href: "/product/category/flowers", id: "2" },
-  { name: "화분", href: "/product/category/pots", id: "3" },
-  { name: "가드닝", href: "/product/category/gardening", id: "4" },
-  { name: "이벤트", href: "/product/category/events", id: "5" },
+  { name: "화분", href: "/product/category/pots", id: "1" },
+  { name: "그릇", href: "/product/category/ceramic", id: "2" },
 ];
 
 const Header = () => {
@@ -34,7 +31,7 @@ const Header = () => {
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-      <div className="container mx-auto px-4">
+      <div className="container max-w-10xl mx-auto px-4">
         <div className="flex h-16 items-center justify-between">
           {/* 로고 */}
           <div className="flex items-center">

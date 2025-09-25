@@ -52,7 +52,6 @@ export default function CartPage() {
 
           {/* 주문 요약 - 데스크톱: 사이드바 */}
           <div className="lg:col-span-1">
-            {/* 데스크톱 버전 */}
             <div className="hidden lg:block sticky top-8">
               <CartSummary />
             </div>
