@@ -4,21 +4,22 @@ import { ProductDetailAdapter } from "@/feature/product/detail/adapters/ProductD
 import ProductDetailView from "@/feature/product/detail/components/ProductDetailView";
 
 interface ProductDetailPageProps {
-  params: {
+  params: Promise<{
     id: string;
-  };
+  }>;
 }
 
 export default async function ProductDetailPage({
   params,
 }: ProductDetailPageProps) {
-  const rawProduct = await getProduct(params.id);
+  const { id } = await params;
+  const productData = await getProduct(id);
 
-  if (!rawProduct) {
+  if (!productData) {
     return notFound();
   }
 
-  const product = ProductDetailAdapter.toClient(rawProduct);
+  const product = ProductDetailAdapter.toClient(productData);
 
   if (!product) {
     return notFound();
@@ -38,7 +39,7 @@ export default async function ProductDetailPage({
           quantity: product.quantity,
           detailDescription: product.detailDescription || "",
         }}
-        productId={params.id}
+        productId={id}
       />
     </div>
   );

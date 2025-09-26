@@ -1,5 +1,5 @@
 import {
-  Order,
+  ClientOrder,
   CreateOrderData,
   CreateOrderItem,
   ServerOrderData,
@@ -11,9 +11,9 @@ import {
  */
 export class OrderAdapter {
   /**
-   * Order 타입을 CreateOrderData 타입으로 변환
+   * ClientOrder 타입을 CreateOrderData 타입으로 변환
    */
-  static toCreateOrderData(order: Order): CreateOrderData {
+  static toCreateOrderData(order: ClientOrder): CreateOrderData {
     return {
       customerId: order.customerId,
       orderNumber: order.orderNumber,
@@ -45,7 +45,7 @@ export class OrderAdapter {
    * OrderItem을 CreateOrderItem으로 변환
    */
   private static toCreateOrderItem(
-    orderItem: Order["items"][0]
+    orderItem: ClientOrder["items"][0]
   ): CreateOrderItem {
     return {
       productId: orderItem.productId,
@@ -72,9 +72,9 @@ export class OrderAdapter {
   }
 
   /**
-   * Order를 서버 전송용 데이터로 변환
+   * ClientOrder를 서버 전송용 데이터로 변환
    */
-  static toServerOrderData(order: Order): ServerOrderData {
+  static toServerOrderData(order: ClientOrder): ServerOrderData {
     return {
       order_number: order.orderNumber,
       customer_id: order.customerId,
@@ -94,10 +94,10 @@ export class OrderAdapter {
   }
 
   /**
-   * Order의 items를 서버 전송용 데이터로 변환
+   * ClientOrder의 items를 서버 전송용 데이터로 변환
    */
   static toServerOrderItemsData(
-    order: Order,
+    order: ClientOrder,
     orderId: string
   ): ServerOrderItemData[] {
     return order.items.map((item) => ({

@@ -59,7 +59,6 @@ export interface ClientOrder {
   updatedAt: Date;
 }
 
-// API 요청/응답 타입들
 export interface CreateOrderItem {
   productId: string;
   productName: string;

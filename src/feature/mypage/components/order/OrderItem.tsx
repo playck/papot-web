@@ -1,12 +1,13 @@
 "use client";
 
-import { Order } from "@/shared/types/order";
 import dayjs from "dayjs";
+import Image from "next/image";
 import { Package } from "lucide-react";
+import { ClientOrder } from "@/shared/types/order";
 import StatusBadge from "@/shared/components/StatusBadge";
 
 interface OrderItemProps {
-  order: Order;
+  order: ClientOrder;
 }
 
 export function OrderItem({ order }: OrderItemProps) {
@@ -15,12 +16,13 @@ export function OrderItem({ order }: OrderItemProps) {
   return (
     <div className="flex  justify-between py-4 border-b border-neutral-100 last:border-b-0">
       {/* 상품 이미지 */}
-      <div className="w-20 h-20 bg-neutral-100 rounded-lg flex items-center justify-center overflow-hidden flex-shrink-0">
+      <div className="w-20 h-20 bg-neutral-100 rounded-lg flex items-center justify-center overflow-hidden flex-shrink-0 relative">
         {firstItem.product.imageUrls?.[0] ? (
-          <img
+          <Image
             src={firstItem.product.imageUrls[0]}
             alt={firstItem.product.name}
-            className="w-full h-full object-cover"
+            fill
+            className="object-cover"
           />
         ) : (
           <Package size={24} className="text-neutral-400" />

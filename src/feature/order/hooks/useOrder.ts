@@ -1,10 +1,10 @@
-import { Order } from "@/shared/types/order";
+import { ClientOrder } from "@/shared/types/order";
 import { createOrder } from "@/shared/api/client-api";
 import { useOrderStore } from "../store/order";
 import { OrderAdapter } from "../adapters/OrderAdapter";
 
 // 주문 상태 한글 변환 함수
-export function getOrderStatusText(status: Order["status"]): string {
+export function getOrderStatusText(status: ClientOrder["status"]): string {
   const statusMap = {
     pending: "결제 대기",
     confirmed: "결제 완료",
@@ -18,7 +18,7 @@ export function getOrderStatusText(status: Order["status"]): string {
 }
 
 // 주문 총액 계산 검증 함수
-export function validateOrderTotal(order: Order): boolean {
+export function validateOrderTotal(order: ClientOrder): boolean {
   const calculatedTotal = order.items.reduce(
     (sum, item) => sum + item.totalPrice,
     0

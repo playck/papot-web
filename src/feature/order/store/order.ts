@@ -1,16 +1,20 @@
 import { create } from "zustand";
 import { devtools } from "zustand/middleware";
-import { Order, OrderCustomer, ShippingAddress } from "@/shared/types/order";
+import {
+  ClientOrder,
+  OrderCustomer,
+  ShippingAddress,
+} from "@/shared/types/order";
 import { PurchaseItem } from "@/shared/hooks/usePurchase";
 
 interface OrderState {
-  order: Order | null;
+  order: ClientOrder | null;
   isLoading: boolean;
   error: string | null;
   isProcessing: boolean;
 
   // 액션
-  setOrder: (order: Order) => void;
+  setOrder: (order: ClientOrder) => void;
   setLoading: (loading: boolean) => void;
   setError: (error: string | null) => void;
   setProcessing: (processing: boolean) => void;
@@ -98,8 +102,8 @@ export const useOrderStore = create<OrderState>()(
       // },
 
       createDirectOrder: (orderData) => {
-        // 주문 데이터를 Order 형태로 변환 (기본값 제공)
-        const order: Order = {
+        // 주문 데이터를 ClientOrder 형태로 변환 (기본값 제공)
+        const order: ClientOrder = {
           id: `order-${Date.now()}`,
           orderNumber: orderData.orderNumber,
           customerId: orderData.userId,

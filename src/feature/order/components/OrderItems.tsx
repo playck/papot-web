@@ -1,11 +1,11 @@
 "use client";
 
 import Image from "next/image";
-import { OrderItem } from "@/shared/types/order";
+import { ClientOrderItem } from "@/shared/types/order";
 import { formatKoreanPrice } from "@/shared/utils/price";
 
 interface OrderItemsProps {
-  items: OrderItem[];
+  items: ClientOrderItem[];
 }
 
 export default function OrderItems({ items }: OrderItemsProps) {

@@ -1,12 +1,12 @@
 "use client";
 
-import { Order } from "@/shared/types/order";
+import { ClientOrder } from "@/shared/types/order";
 
 interface StatusBadgeProps {
-  status: Order["status"];
+  status: ClientOrder["status"];
 }
 
-const getStatusInfo = (status: Order["status"]) => {
+const getStatusInfo = (status: ClientOrder["status"]) => {
   switch (status) {
     case "pending":
     case "confirmed":
