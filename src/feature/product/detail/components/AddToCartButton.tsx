@@ -1,7 +1,9 @@
 "use client";
 
 import { ShoppingCart } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { useCart } from "@/feature/cart/hooks";
+import { useAuth } from "@/shared/hooks/useAuth";
 
 interface AddToCartButtonProps {
   productId?: string;
@@ -21,10 +23,24 @@ export default function AddToCartButton({
   className = "",
 }: AddToCartButtonProps) {
   const { handleAddItemToCart } = useCart();
+  const { user } = useAuth();
+  const router = useRouter();
 
   const handleAddToCart = () => {
     if (!productId) {
       alert("상품 정보를 찾을 수 없습니다.");
+      return;
+    }
+
+    // 로그인 상태 확인
+    if (!user) {
+      if (
+        confirm(
+          "로그인이 필요한 서비스입니다.\n로그인 페이지로 이동하시겠습니까?"
+        )
+      ) {
+        router.push("/signin");
+      }
       return;
     }
 
