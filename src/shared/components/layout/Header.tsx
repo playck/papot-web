@@ -11,7 +11,7 @@ import { useCart } from "@/feature/cart/hooks";
 const menuItems = [
   { name: "홈", href: "/" },
   { name: "화분", href: "/product/category/pots", id: "1" },
-  { name: "그릇", href: "/product/category/ceramic", id: "2" },
+  { name: "도자기 / 그릇", href: "/product/category/ceramic", id: "2" },
 ];
 
 const Header = () => {
@@ -59,11 +59,6 @@ const Header = () => {
 
           {/* 우측 액션 버튼들 */}
           <div className="flex items-center space-x-4">
-            <button className="hidden sm:flex h-9 w-9 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground">
-              <Search className="h-4 w-4" />
-              <span className="sr-only">검색</span>
-            </button>
-
             <Link
               href="/cart"
               className="relative h-9 w-9 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground flex"
