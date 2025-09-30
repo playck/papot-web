@@ -12,7 +12,6 @@ export interface AddressData {
 interface AddressSearchProps {
   onAddressSelect: (addressData: AddressData) => void;
   buttonText?: string;
-  buttonClassName?: string;
 }
 
 type SearchAddressData = {
@@ -22,10 +21,7 @@ type SearchAddressData = {
   userSelectedType: "R" | "J";
 };
 
-export default function AddressSearch({
-  onAddressSelect,
-  buttonClassName = "w-full h-12 bg-primary-600 hover:bg-primary-700 text-white rounded-md font-medium transition-colors duration-200 flex items-center justify-center gap-2",
-}: AddressSearchProps) {
+export default function AddressSearch({ onAddressSelect }: AddressSearchProps) {
   const [isOpen, setIsOpen] = useState(false);
 
   const handleComplete = (data: SearchAddressData) => {
@@ -49,7 +45,7 @@ export default function AddressSearch({
       <button
         type="button"
         onClick={() => setIsOpen(true)}
-        className={buttonClassName}
+        className="w-full h-12 bg-primary-600 hover:bg-primary-700 text-white rounded-md font-medium transition-colors duration-200 flex items-center justify-center gap-2"
       >
         <Search size={16} />
         주소 찾기

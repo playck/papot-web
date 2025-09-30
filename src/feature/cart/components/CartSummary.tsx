@@ -1,11 +1,47 @@
+import { useRouter } from "next/navigation";
 import { formatKoreanPrice } from "@/shared/utils/price";
+import { useAuth } from "@/shared/hooks/useAuth";
 import { useCart } from "@/feature/cart/hooks";
+import { useOrderStore } from "@/feature/order/store/order";
 
 export default function CartSummary() {
-  const { totalItems, totalPrice } = useCart();
+  const router = useRouter();
+  const { user } = useAuth();
+  const { items, totalItems, totalPrice } = useCart();
+  const { createDirectOrder } = useOrderStore();
 
-  const deliveryFee = totalPrice >= 50000 ? 0 : 3000;
+  const deliveryFee = totalPrice >= 80000 ? 0 : 3000;
   const finalTotal = totalPrice + deliveryFee;
+
+  const handleOrderClick = () => {
+    if (!user) {
+      router.push("/signin");
+      return;
+    }
+
+    if (items.length === 0) {
+      alert("장바구니가 비어있습니다.");
+      return;
+    }
+
+    const orderItems = items.map((item) => ({
+      productId: item.productId,
+      productName: item.name,
+      price: item.price,
+      quantity: item.quantity,
+      imageUrl: item.imageUrl,
+    }));
+
+    createDirectOrder({
+      orderNumber: `ORDER-${Date.now()}`,
+      items: orderItems,
+      totalAmount: totalPrice, // 상품 가격
+      shippingFee: deliveryFee, // 배송비
+      userId: user.id,
+    });
+
+    router.push("/order");
+  };
 
   return (
     <div className="bg-gray-50 rounded-lg p-6">
@@ -41,7 +77,11 @@ export default function CartSummary() {
         </div>
       </div>
 
-      <button className="w-full mt-6 bg-primary-600 text-white py-4 rounded-lg font-medium hover:bg-primary-700 transition-colors">
+      <button
+        onClick={handleOrderClick}
+        disabled={items.length === 0}
+        className="w-full mt-6 bg-primary-600 text-white py-4 rounded-lg font-medium hover:bg-primary-700 transition-colors disabled:bg-gray-400 disabled:cursor-not-allowed"
+      >
         주문하기
       </button>
     </div>

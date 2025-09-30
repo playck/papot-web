@@ -7,7 +7,6 @@ import {
   ProductListResponse,
   convertProductDataToClient,
 } from "../types/product";
-import { ClientOrder } from "../types/order";
 import { Product as SupabaseProduct } from "@/types/supabase";
 import {
   CreateOrderResponse,
@@ -101,131 +100,6 @@ export async function getCategories(): Promise<string[]> {
 
   const categories = [...new Set(data.map((item) => item.category))].sort();
   return categories;
-}
-
-// 주문 목록 조회 (임시 Mock 데이터)
-export async function getUserOrders(userId: string): Promise<ClientOrder[]> {
-  // 실제 API 구현 전까지 Mock 데이터 사용
-  return new Promise<ClientOrder[]>((resolve) => {
-    setTimeout(() => {
-      resolve([
-        {
-          id: "order-1",
-          orderNumber: "2024091201",
-          customerId: userId,
-          customer: {
-            name: "홍길동",
-            email: "hong@example.com",
-            phone: "010-1234-5678",
-          },
-          status: "delivered",
-          createdAt: new Date("2024-09-01"),
-          updatedAt: new Date("2024-09-05"),
-          items: [
-            {
-              id: "item-1",
-              productId: "1",
-              product: {
-                id: "1",
-                name: "프리미엄 유기농 쌀",
-                price: 25000,
-                imageUrls: ["/images/rice.jpg"],
-                quantity: 100,
-                isPublished: true,
-                uploadedBy: "admin",
-                createdAt: new Date("2024-01-01"),
-                updatedAt: new Date("2024-01-01"),
-              },
-              quantity: 2,
-              unitPrice: 25000,
-              totalPrice: 50000,
-            },
-          ],
-          shippingAddress: {
-            recipientName: "홍길동",
-            phone: "010-1234-5678",
-            address: "서울시 강남구 테헤란로 123",
-            detailAddress: "456호",
-            zipCode: "12345",
-            deliveryRequest: "문 앞에 놓아주세요",
-          },
-          summary: {
-            totalProductPrice: 50000,
-            shippingFee: 3000,
-            couponDiscount: 0,
-            pointDiscount: 0,
-            finalPrice: 53000,
-          },
-        },
-        {
-          id: "order-2",
-          orderNumber: "2024090801",
-          customerId: userId,
-          customer: {
-            name: "김영희",
-            email: "kim@example.com",
-            phone: "010-9876-5432",
-          },
-          status: "shipped",
-          createdAt: new Date("2024-08-28"),
-          updatedAt: new Date("2024-09-01"),
-          items: [
-            {
-              id: "item-2",
-              productId: "2",
-              product: {
-                id: "2",
-                name: "신선한 계란",
-                price: 8000,
-                imageUrls: ["/images/eggs.jpg"],
-                quantity: 50,
-                isPublished: true,
-                uploadedBy: "admin",
-                createdAt: new Date("2024-01-01"),
-                updatedAt: new Date("2024-01-01"),
-              },
-              quantity: 1,
-              unitPrice: 8000,
-              totalPrice: 8000,
-            },
-            {
-              id: "item-3",
-              productId: "3",
-              product: {
-                id: "3",
-                name: "유기농 우유",
-                price: 4500,
-                imageUrls: ["/images/milk.jpg"],
-                quantity: 30,
-                isPublished: true,
-                uploadedBy: "admin",
-                createdAt: new Date("2024-01-01"),
-                updatedAt: new Date("2024-01-01"),
-              },
-              quantity: 3,
-              unitPrice: 4500,
-              totalPrice: 13500,
-            },
-          ],
-          shippingAddress: {
-            recipientName: "김영희",
-            phone: "010-9876-5432",
-            address: "부산시 해운대구 해운대로 456",
-            detailAddress: "789호",
-            zipCode: "67890",
-            deliveryRequest: "경비실에 맡겨주세요",
-          },
-          summary: {
-            totalProductPrice: 21500,
-            shippingFee: 3000,
-            couponDiscount: 1500,
-            pointDiscount: 0,
-            finalPrice: 23000,
-          },
-        },
-      ]);
-    }, 500);
-  });
 }
 
 // 사용자 프로필 정보 조회

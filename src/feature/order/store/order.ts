@@ -31,6 +31,7 @@ interface OrderState {
     orderNumber: string;
     items: PurchaseItem[];
     totalAmount: number;
+    shippingFee?: number;
     userId: string;
     customer?: OrderCustomer;
     shippingAddress?: ShippingAddress;
@@ -119,11 +120,6 @@ export const useOrderStore = create<OrderState>()(
               id: item.productId,
               name: item.productName,
               price: item.price,
-              quantity: 0, // 주문 시점의 재고는 별도 관리
-              isPublished: true,
-              uploadedBy: "unknown", // 실제 구현 시 상품 정보에서 가져오기
-              createdAt: new Date(),
-              updatedAt: new Date(),
               imageUrls: item.imageUrl ? [item.imageUrl] : [],
             },
             quantity: item.quantity,
@@ -140,10 +136,10 @@ export const useOrderStore = create<OrderState>()(
           },
           summary: {
             totalProductPrice: orderData.totalAmount,
-            shippingFee: 0,
+            shippingFee: orderData.shippingFee || 0,
             couponDiscount: 0,
             pointDiscount: 0,
-            finalPrice: orderData.totalAmount,
+            finalPrice: orderData.totalAmount + (orderData.shippingFee || 0),
           },
           status: "pending" as const,
           createdAt: new Date(),
