@@ -1,5 +1,13 @@
+import { CATEGORIES } from "./categories";
+
 export const MENU_ITEMS = [
   { name: "홈", href: "/" },
-  { name: "화분", href: "/product/category/pots" },
-  { name: "도자기 / 그릇", href: "/product/category/ceramic" },
+  {
+    name: CATEGORIES.POTS.name,
+    href: `/product/category/${CATEGORIES.POTS.slug}`,
+  },
+  {
+    name: CATEGORIES.CERAMIC.name,
+    href: `/product/category/${CATEGORIES.CERAMIC.slug}`,
+  },
 ];

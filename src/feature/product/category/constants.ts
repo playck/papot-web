@@ -1,9 +1,11 @@
+import { CATEGORIES } from "@/shared/constants/categories";
+
 export const CATEGORY_ITEMS = {
-  pots: "1",
-  ceramic: "2",
+  pots: CATEGORIES.POTS.id.toString(),
+  ceramic: CATEGORIES.CERAMIC.id.toString(),
 };
 
 export const CATEGORY_NAMES = {
-  pots: "화분",
-  ceramic: "도자기 / 그릇",
+  pots: CATEGORIES.POTS.name,
+  ceramic: CATEGORIES.CERAMIC.name,
 };
