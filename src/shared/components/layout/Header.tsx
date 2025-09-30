@@ -7,12 +7,7 @@ import { Menu, X, Search, ShoppingCart, User, LogOut } from "lucide-react";
 import { useAuth } from "@/shared/hooks/useAuth";
 import { signOut } from "@/app/(auth)/services/api";
 import { useCart } from "@/feature/cart/hooks";
-
-const menuItems = [
-  { name: "홈", href: "/" },
-  { name: "화분", href: "/product/category/pots", id: "1" },
-  { name: "도자기 / 그릇", href: "/product/category/ceramic", id: "2" },
-];
+import { MENU_ITEMS } from "@/shared/constants/menu";
 
 const Header = () => {
   const { user, loading } = useAuth();
@@ -46,7 +41,7 @@ const Header = () => {
           </div>
 
           <nav className="hidden md:flex items-center space-x-8">
-            {menuItems.map((item) => (
+            {MENU_ITEMS.map((item) => (
               <Link
                 key={item.name}
                 href={item.href}
@@ -155,7 +150,7 @@ const Header = () => {
         {isMenuOpen && (
           <div className="md:hidden border-t border-border">
             <nav className="flex flex-col space-y-1 py-4">
-              {menuItems.map((item) => (
+              {MENU_ITEMS.map((item) => (
                 <Link
                   key={item.name}
                   href={item.href}

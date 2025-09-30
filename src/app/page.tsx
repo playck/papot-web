@@ -4,9 +4,8 @@ export default function Home() {
   return (
     <div className="min-h-screen">
       <IntroBanner />
-      <CategorySection title="인기 식물" />
-      <CategorySection title="계절 꽃" />
-      <CategorySection title="화분 & 플랜터" />
+      <CategorySection title="화분" />
+      <CategorySection title="도자기 / 그릇" />
     </div>
   );
 }
