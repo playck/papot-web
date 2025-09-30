@@ -1,15 +1,14 @@
-import { Product } from "./product";
-import {
-  Order as DbOrder,
-  OrderItem as DbOrderItem,
-  OrderInsert,
-  OrderItemInsert,
-} from "../../types/supabase";
+import { OrderInsert, OrderItemInsert } from "../../types/supabase";
 
 export interface ClientOrderItem {
   id: string;
   productId: string;
-  product: Product;
+  product: {
+    id: string;
+    name: string;
+    price: number;
+    imageUrls: string[];
+  };
   quantity: number;
   unitPrice: number;
   totalPrice: number;
