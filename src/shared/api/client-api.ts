@@ -421,6 +421,8 @@ async function updateCartTotals(cartId: string): Promise<void> {
     .select("quantity, total_price")
     .eq("cart_id", cartId);
 
+  if (!items) return;
+
   const totalQuantity =
     items?.reduce((sum, item) => sum + item.quantity, 0) || 0;
   const totalAmount =

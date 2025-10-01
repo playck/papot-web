@@ -1,42 +1,12 @@
-import { ClientOrder } from "@/shared/types/order";
-import { createOrder } from "@/shared/api/client-api";
+import { createOrder, getUserCart, clearCart } from "@/shared/api/client-api";
+import { useAuth } from "@/shared/hooks/useAuth";
 import { useOrderStore } from "../store/order";
 import { OrderAdapter } from "../adapters/OrderAdapter";
-
-// 주문 상태 한글 변환 함수
-export function getOrderStatusText(status: ClientOrder["status"]): string {
-  const statusMap = {
-    pending: "결제 대기",
-    confirmed: "결제 완료",
-    processing: "상품 준비중",
-    shipped: "배송중",
-    delivered: "배송 완료",
-    cancelled: "주문 취소",
-  };
-
-  return statusMap[status] || "알 수 없음";
-}
-
-// 주문 총액 계산 검증 함수
-export function validateOrderTotal(order: ClientOrder): boolean {
-  const calculatedTotal = order.items.reduce(
-    (sum, item) => sum + item.totalPrice,
-    0
-  );
-
-  const expectedTotal =
-    order.summary.totalProductPrice +
-    order.summary.shippingFee -
-    order.summary.pointDiscount;
-
-  return (
-    calculatedTotal === order.summary.totalProductPrice &&
-    expectedTotal === order.summary.finalPrice
-  );
-}
+import { validateOrderTotal } from "../utils/order";
 
 export function useOrder() {
   const { order, setOrder, setError, setProcessing } = useOrderStore();
+  const { user } = useAuth();
 
   /**
    * 주문 처리 함수
@@ -73,6 +43,15 @@ export function useOrder() {
       };
 
       setOrder(updatedOrder);
+
+      // 주문 완료 후 장바구니 비우기
+      if (user?.id) {
+        const userCart = await getUserCart(user.id);
+
+        if (userCart?.id) {
+          await clearCart(userCart.id);
+        }
+      }
 
       return { success: true, orderId: result.orderId };
     } catch (err) {
