@@ -1,3 +1,4 @@
+import { useRouter } from "next/navigation";
 import { createOrder, getUserCart, clearCart } from "@/shared/api/client-api";
 import { useAuth } from "@/shared/hooks/useAuth";
 import { useOrderStore } from "../store/order";
@@ -5,6 +6,7 @@ import { OrderAdapter } from "../adapters/OrderAdapter";
 import { validateOrderTotal } from "../utils/order";
 
 export function useOrder() {
+  const router = useRouter();
   const { order, setOrder, setError, setProcessing } = useOrderStore();
   const { user } = useAuth();
 
@@ -52,6 +54,8 @@ export function useOrder() {
           await clearCart(userCart.id);
         }
       }
+
+      router.push(`/order/complete/${result.orderId}`);
 
       return { success: true, orderId: result.orderId };
     } catch (err) {
