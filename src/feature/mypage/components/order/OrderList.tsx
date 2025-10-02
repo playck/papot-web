@@ -2,7 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { ShoppingBag } from "lucide-react";
-import { useUserOrders } from "@/shared/hooks/useUserOrders";
+import { useUserOrders } from "@/feature/order/hooks/useUserOrders";
 import { useAuth } from "@/shared/hooks/useAuth";
 import PageLoader from "@/shared/components/PageLoader";
 import PageError from "@/shared/components/PageError";

@@ -7,12 +7,18 @@ import {
   ProductListResponse,
   convertProductDataToClient,
 } from "../types/product";
-import { Product as SupabaseProduct } from "@/types/supabase";
+import { Product as DatabaseProduct } from "@/types/supabase";
 import {
   CreateOrderResponse,
   ServerOrderData,
   ServerOrderItemData,
 } from "../types/order";
+import {
+  CreateCartData,
+  CreateCartItemData,
+  DatabaseCart,
+  DatabaseCartItem,
+} from "../types/cart";
 
 // 상품 목록 조회
 export async function getProducts(
@@ -55,7 +61,7 @@ export async function getProducts(
     throw new Error(`상품 목록 조회 실패: ${error.message}`);
   }
 
-  const products: Product[] = (data || []).map((item: SupabaseProduct) =>
+  const products: Product[] = (data || []).map((item: DatabaseProduct) =>
     convertProductDataToClient(item)
   );
 
@@ -83,7 +89,7 @@ export async function getProduct(id: string): Promise<Product | null> {
     throw new Error(`상품 조회 실패: ${error.message}`);
   }
 
-  return convertProductDataToClient(data as SupabaseProduct);
+  return convertProductDataToClient(data as DatabaseProduct);
 }
 
 // 카테고리 목록 조회
@@ -183,17 +189,30 @@ export async function createOrder(
   }
 }
 
-// =====================================================
-// 장바구니 API 함수들
-// =====================================================
+// 사용자 주문 목록 조회
+export async function getUserOrders(userId: string) {
+  const { data: orders, error: ordersError } = await supabase
+    .from("orders")
+    .select(
+      `
+      *,
+      order_items (*),
+      profiles!fk_orders_customer (
+        user_name,
+        email,
+        phone
+      )
+    `
+    )
+    .eq("customer_id", userId)
+    .order("created_at", { ascending: false });
 
-import {
-  CreateCartData,
-  CreateCartItemData,
-  DatabaseCart,
-  DatabaseCartItem,
-} from "../types/cart";
-import { supabase as supabaseClient } from "@/services/supabase/client";
+  if (ordersError) {
+    throw new Error(`주문 목록 조회 실패: ${ordersError.message}`);
+  }
+
+  return orders || [];
+}
 
 /**
  * 사용자의 장바구니 조회
@@ -201,8 +220,6 @@ import { supabase as supabaseClient } from "@/services/supabase/client";
 export async function getUserCart(
   userId: string
 ): Promise<DatabaseCart | null> {
-  const supabase = supabaseClient;
-
   const { data, error } = await supabase
     .from("carts")
     .select("*")
@@ -223,8 +240,6 @@ export async function getUserCart(
 export async function createUserCart(
   userId: string
 ): Promise<DatabaseCart | null> {
-  const supabase = supabaseClient;
-
   const cartData: CreateCartData = {
     user_id: userId,
     total_amount: 0,
@@ -251,8 +266,6 @@ export async function createUserCart(
 export async function getCartItems(
   cartId: string
 ): Promise<DatabaseCartItem[]> {
-  const supabase = supabaseClient;
-
   const { data, error } = await supabase
     .from("cart_items")
     .select("*")
@@ -277,8 +290,6 @@ export async function addItemToCart(
   unitPrice: number,
   quantity: number
 ): Promise<DatabaseCartItem | null> {
-  const supabase = supabaseClient;
-
   const { data: existingItem } = await supabase
     .from("cart_items")
     .select("*")
@@ -327,8 +338,6 @@ export async function updateCartItemQuantity(
   itemId: string,
   quantity: number
 ): Promise<DatabaseCartItem | null> {
-  const supabase = supabaseClient;
-
   if (quantity <= 0) {
     await removeCartItem(itemId);
     return null;
@@ -366,8 +375,6 @@ export async function updateCartItemQuantity(
  * 장바구니 아이템 삭제
  */
 export async function removeCartItem(itemId: string): Promise<boolean> {
-  const supabase = supabaseClient;
-
   const { data: item } = await supabase
     .from("cart_items")
     .select("cart_id")
@@ -392,8 +399,6 @@ export async function removeCartItem(itemId: string): Promise<boolean> {
  * 장바구니 비우기
  */
 export async function clearCart(cartId: string): Promise<boolean> {
-  const supabase = supabaseClient;
-
   const { error } = await supabase
     .from("cart_items")
     .delete()
@@ -413,8 +418,6 @@ export async function clearCart(cartId: string): Promise<boolean> {
  * 장바구니 총계 업데이트
  */
 async function updateCartTotals(cartId: string): Promise<void> {
-  const supabase = supabaseClient;
-
   // 장바구니 아이템들의 총합 계산
   const { data: items } = await supabase
     .from("cart_items")

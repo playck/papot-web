@@ -1,4 +1,10 @@
-import { OrderInsert, OrderItemInsert } from "../../types/supabase";
+import {
+  OrderInsert,
+  OrderItemInsert,
+  Order as DatabaseOrder,
+  OrderItem as DatabaseOrderItem,
+  Profile as DatabaseProfile,
+} from "../../types/supabase";
 
 export interface ClientOrderItem {
   id: string;
@@ -92,3 +98,8 @@ export interface CreateOrderRequest {
 export type ServerOrderData = OrderInsert;
 
 export type ServerOrderItemData = OrderItemInsert;
+
+export interface OrderWithUser extends DatabaseOrder {
+  order_items: DatabaseOrderItem[];
+  profiles: Pick<DatabaseProfile, "user_name" | "email" | "phone"> | null;
+}
