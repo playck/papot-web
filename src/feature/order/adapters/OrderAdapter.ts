@@ -66,56 +66,8 @@ export class OrderAdapter {
    * 데이터베이스 주문 목록을 ClientOrder 배열로 변환
    */
   static toClientOrders(orders: OrderWithUser[]): ClientOrder[] {
-    return orders.map((order) => this.toClientOrder(order));
+    return orders?.map((order) => this.toClientOrder(order));
   }
-
-  /**
-   * ClientOrder 타입을 CreateOrderData 타입으로 변환
-   */
-  // static toCreateOrderData(order: ClientOrder): CreateOrderData {
-  //   return {
-  //     customerId: order.customerId,
-  //     orderNumber: order.orderNumber,
-  //     customer: {
-  //       name: order.customer.name,
-  //       email: order.customer.email,
-  //       phone: order.customer.phone,
-  //     },
-  //     items: order.items.map(this.toCreateOrderItem),
-  //     shippingAddress: {
-  //       recipientName: order.shippingAddress.recipientName,
-  //       phone: order.shippingAddress.phone,
-  //       address: order.shippingAddress.address,
-  //       detailAddress: order.shippingAddress.detailAddress,
-  //       zipCode: order.shippingAddress.zipCode,
-  //       deliveryRequest: order.shippingAddress.deliveryRequest,
-  //     },
-  //     summary: {
-  //       totalProductPrice: order.summary.totalProductPrice,
-  //       shippingFee: order.summary.shippingFee,
-  //       couponDiscount: order.summary.couponDiscount,
-  //       pointDiscount: order.summary.pointDiscount,
-  //       finalPrice: order.summary.finalPrice,
-  //     },
-  //   };
-  // }
-
-  /**
-   * OrderItem을 CreateOrderItem으로 변환
-   */
-  // private static toCreateOrderItem(
-  //   orderItem: ClientOrder["items"][0]
-  // ): CreateOrderItem {
-  //   return {
-  //     productId: orderItem.productId,
-  //     productName: orderItem.product.name,
-  //     productPrice: orderItem.product.price,
-  //     productImageUrl: orderItem.product.imageUrls?.[0],
-  //     quantity: orderItem.quantity,
-  //     unitPrice: orderItem.unitPrice,
-  //     totalPrice: orderItem.totalPrice,
-  //   };
-  // }
 
   /**
    * 주문 번호 생성

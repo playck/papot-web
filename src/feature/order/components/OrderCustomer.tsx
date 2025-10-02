@@ -67,7 +67,7 @@ export default function OrderCustomer({ customer }: OrderCustomerProps) {
           type="tel"
           value={customer.phone}
           onChange={(e) => handleInputChange("phone", e.target.value)}
-          placeholder="휴대폰 번호를 입력하세요 (010-1234-5678)"
+          placeholder="휴대폰 번호를 입력하세요 (01012345678)"
         />
       </div>
     </div>

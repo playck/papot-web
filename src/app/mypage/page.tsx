@@ -44,7 +44,7 @@ export default function MyPage() {
         <TabMenu activeTab={activeTab} onTabChange={setActiveTab} />
 
         {activeTab === "orders" && (
-          <div className="bg-white rounded-lg border border-neutral-200 p-6">
+          <div className="bg-white rounded-lg border border-neutral-200 px-6 py-4">
             <OrderList />
           </div>
         )}

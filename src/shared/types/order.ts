@@ -64,35 +64,10 @@ export interface ClientOrder {
   updatedAt: Date;
 }
 
-export interface CreateOrderItem {
-  productId: string;
-  productName: string;
-  productPrice: number;
-  productImageUrl?: string;
-  quantity: number;
-  unitPrice: number;
-  totalPrice: number;
-}
-
-export interface CreateOrderData {
-  customerId: string;
-  orderNumber: string;
-  customer: OrderCustomer;
-  items: CreateOrderItem[];
-  shippingAddress: ShippingAddress;
-  summary: OrderSummary;
-}
-
 export interface CreateOrderResponse {
   success: boolean;
   orderId?: string;
   error?: string;
-}
-
-export interface CreateOrderRequest {
-  customer: OrderCustomer;
-  items: Omit<ClientOrderItem, "id" | "product">[];
-  shippingAddress: ShippingAddress;
 }
 
 export type ServerOrderData = OrderInsert;
