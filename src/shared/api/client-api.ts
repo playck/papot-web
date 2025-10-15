@@ -19,6 +19,7 @@ import {
   DatabaseCart,
   DatabaseCartItem,
 } from "../types/cart";
+import { Settings } from "../types/settings";
 
 // 상품 목록 조회
 export async function getProducts(
@@ -439,3 +440,17 @@ async function updateCartTotals(cartId: string): Promise<void> {
     })
     .eq("id", cartId);
 }
+
+/**
+ * 메인 설정 정보 조회
+ */
+
+export const getSettings = async (): Promise<Settings | null> => {
+  const { data, error } = await supabase.from("settings").select("*").single();
+
+  if (error) {
+    throw new Error("설정을 불러올 수 없습니다.");
+  }
+
+  return data;
+};
