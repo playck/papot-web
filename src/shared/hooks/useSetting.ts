@@ -14,12 +14,14 @@ export const useSetting = () => {
     queryFn: getSettings,
     staleTime: 1000 * 60 * 5,
     gcTime: 1000 * 60 * 10,
+    refetchOnMount: false,
+    refetchOnWindowFocus: false,
   });
 
   return {
     settings,
     isLoading,
     error,
-    bannerImageUrl: settings?.main_image_url,
+    bannerImageUrl: settings?.main_image_url || null,
   };
 };

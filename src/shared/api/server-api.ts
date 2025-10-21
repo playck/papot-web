@@ -5,6 +5,7 @@ import {
   ProductListResponse,
   convertProductDataToClient,
 } from "../types/product";
+import { Settings } from "../types/settings";
 
 // 상품 목록 조회
 export async function getProducts(
@@ -105,4 +106,21 @@ export async function getCategories(): Promise<string[]> {
 
   const categories = [...new Set(data.map((item) => item.category))].sort();
   return categories;
+}
+
+// 메인 설정 정보 조회
+export async function getSettings(): Promise<Settings | null> {
+  const supabase = await createClient();
+
+  const { data, error } = await supabase
+    .from("settings")
+    .select("*")
+    .maybeSingle();
+
+  if (error) {
+    console.error("설정 조회 실패:", error);
+    return null;
+  }
+
+  return data;
 }
