@@ -2,18 +2,26 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { Menu, X, Search, ShoppingCart, User, LogOut } from "lucide-react";
-import { useAuth } from "@/shared/hooks/useAuth";
 import { signOut } from "@/app/(auth)/services/api";
 import { useCart } from "@/feature/cart/hooks";
-import { MENU_ITEMS } from "@/shared/constants/menu";
+import { useAuth } from "@/shared/hooks/useAuth";
+import { useCategories } from "@/shared/hooks/useCategories";
 
 const Header = () => {
   const { user, loading } = useAuth();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
   const { totalItems } = useCart();
+  const { categories } = useCategories();
+
+  const menuItems = useMemo(() => {
+    return categories.map((category) => ({
+      name: category.name,
+      href: `/product/category/${category.name}`,
+    }));
+  }, [categories]);
 
   const handleSignOut = async () => {
     try {
@@ -41,7 +49,7 @@ const Header = () => {
           </div>
 
           <nav className="hidden md:flex items-center space-x-8">
-            {MENU_ITEMS.map((item) => (
+            {menuItems.map((item) => (
               <Link
                 key={item.name}
                 href={item.href}
@@ -150,7 +158,7 @@ const Header = () => {
         {isMenuOpen && (
           <div className="md:hidden border-t border-border">
             <nav className="flex flex-col space-y-1 py-4">
-              {MENU_ITEMS.map((item) => (
+              {menuItems.map((item) => (
                 <Link
                   key={item.name}
                   href={item.href}

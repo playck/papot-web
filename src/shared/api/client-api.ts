@@ -444,13 +444,33 @@ async function updateCartTotals(cartId: string): Promise<void> {
 /**
  * 메인 설정 정보 조회
  */
-
 export const getSettings = async (): Promise<Settings | null> => {
-  const { data, error } = await supabase.from("settings").select("*").single();
+  const { data, error } = await supabase
+    .from("settings")
+    .select("*")
+    .maybeSingle();
 
   if (error) {
-    throw new Error("설정을 불러올 수 없습니다.");
+    console.error("설정 조회 실패:", error);
+    return null;
   }
 
   return data;
 };
+
+/**
+ * 카테고리 메뉴 목록 조회
+ */
+export async function getCategoryMenu() {
+  const { data, error } = await supabase
+    .from("categories")
+    .select("*")
+    .order("id", { ascending: true });
+
+  if (error) {
+    console.error("카테고리 조회 실패:", error);
+    return [];
+  }
+
+  return data || [];
+}
