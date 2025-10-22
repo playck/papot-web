@@ -13,11 +13,7 @@ const ProductCard = ({ product }: ProductCardProps) => {
   const discountedPrice = product.discountRate
     ? product.price * (1 - product.discountRate / 100)
     : product.price;
-
   const badges = [...(product.badges || [])];
-  if (product.quantity <= 2) {
-    badges.unshift("품절 임박");
-  }
 
   return (
     <div className="group bg-card rounded-xl overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
