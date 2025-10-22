@@ -24,7 +24,7 @@ export default function ProductInfo({
   pointRate = 1,
   shippingFee = 3000,
   shippingThreshold = 70000,
-  deliveryDate = "9/8(일)",
+  deliveryDate,
   imageUrl,
 }: ProductInfoProps) {
   const hasDiscount = discountedPrice && discountedPrice < originalPrice;

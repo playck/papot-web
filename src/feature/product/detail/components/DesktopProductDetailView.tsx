@@ -1,4 +1,5 @@
 import { ProductDetailInfo, ProductImageWrapper, ProductInfo } from "./index";
+import { getDeliveryDate } from "@/shared/utils/date";
 
 interface DesktopProductDetailViewProps {
   product: {
@@ -19,6 +20,8 @@ export default function DesktopProductDetailView({
   product,
   productId,
 }: DesktopProductDetailViewProps) {
+  const deliveryDate = getDeliveryDate();
+
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
       {/* 왼쪽: 이미지 + 상세정보 */}
@@ -54,7 +57,7 @@ export default function DesktopProductDetailView({
           discountRate={product.hasDiscount ? product.discountRate : undefined}
           productId={productId}
           pointRate={0.1}
-          deliveryDate="9/2(화)"
+          deliveryDate={deliveryDate}
           imageUrl={product.imageUrls[0]}
         />
       </div>
