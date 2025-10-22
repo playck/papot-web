@@ -14,12 +14,14 @@ const ProductCard = ({ product }: ProductCardProps) => {
     ? product.price * (1 - product.discountRate / 100)
     : product.price;
   const badges = [...(product.badges || [])];
+  const isImgOk =
+    product.imageUrls && product.imageUrls.length > 0 && !imageError;
 
   return (
     <div className="group bg-card rounded-xl overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
       {/* 상품 이미지 */}
       <div className="aspect-square overflow-hidden bg-neutral-100 relative">
-        {product.imageUrls && product.imageUrls.length > 0 && !imageError ? (
+        {isImgOk ? (
           <Image
             src={product.imageUrls[0]}
             alt={product.name}
@@ -44,36 +46,18 @@ const ProductCard = ({ product }: ProductCardProps) => {
       <div className="p-4">
         {/* 뱃지 영역 */}
         <div className="h-6 mb-3 flex flex-wrap gap-1">
-          {badges.length > 0 && (
-            <>
-              {badges.slice(0, 5).map((badge, index) => {
-                const getBadgeStyle = (
-                  badgeText: string,
-                  badgeIndex: number
-                ) => {
-                  if (badgeText === "품절 임박") {
-                    return "bg-red-100 text-red-600";
-                  }
-
-                  return badgeIndex % 2 === 0
-                    ? "bg-primary-100 text-primary-600"
-                    : "bg-secondary-100 text-secondary-700";
-                };
-
-                return (
-                  <span
-                    key={index}
-                    className={`px-2 py-1 rounded text-xs font-medium ${getBadgeStyle(
-                      badge,
-                      index
-                    )}`}
-                  >
-                    {badge}
-                  </span>
-                );
-              })}
-            </>
-          )}
+          {badges.slice(0, 5).map((badge, index) => (
+            <span
+              key={index}
+              className={`px-2 py-1 rounded text-xs font-medium ${
+                index % 2 === 0
+                  ? "bg-primary-100 text-primary-600"
+                  : "bg-secondary-100 text-secondary-700"
+              }`}
+            >
+              {badge}
+            </span>
+          ))}
         </div>
 
         {/* 상품명 */}
