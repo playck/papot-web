@@ -146,7 +146,6 @@ export const useOrderStore = create<OrderState>()(
           updatedAt: new Date(),
         };
 
-        console.log("✅ 주문 데이터 변환 완료:", order);
         set({ order, error: null });
       },
 
