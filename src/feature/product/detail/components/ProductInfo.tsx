@@ -22,12 +22,15 @@ export default function ProductInfo({
   discountRate,
   productId,
   pointRate = 1,
-  shippingFee = 3000,
-  shippingThreshold = 70000,
+  shippingFee = 5000,
+  shippingThreshold = 100000,
   deliveryDate,
   imageUrl,
 }: ProductInfoProps) {
-  const hasDiscount = discountedPrice && discountedPrice < originalPrice;
+  const hasDiscount =
+    discountedPrice !== undefined &&
+    discountedPrice > 0 &&
+    discountedPrice < originalPrice;
   const finalPrice = hasDiscount ? discountedPrice! : originalPrice;
 
   return (
@@ -54,7 +57,7 @@ export default function ProductInfo({
 
         <div className="flex items-baseline gap-2">
           <span className="text-3xl md:text-4xl font-bold text-neutral-900">
-            {formatKoreanPrice(hasDiscount ? discountedPrice! : originalPrice)}
+            {formatKoreanPrice(finalPrice)}
           </span>
           <span className="text-xl text-neutral-600">원</span>
           {hasDiscount && (
