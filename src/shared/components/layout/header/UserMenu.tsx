@@ -64,18 +64,18 @@ export default function UserMenu() {
           )}
         </>
       ) : (
-        <div className="flex items-center space-x-2">
+        <div className="flex items-center space-x-4">
           <Link
             href="/signin"
             className="text-sm font-medium text-muted-foreground hover:text-primary-600 transition-colors"
           >
-            로그인
+            Login
           </Link>
           <Link
             href="/signup"
             className="text-sm font-medium bg-primary-600 text-white px-3 py-1 rounded-md hover:bg-primary-700 transition-colors"
           >
-            회원가입
+            Signup
           </Link>
         </div>
       )}
