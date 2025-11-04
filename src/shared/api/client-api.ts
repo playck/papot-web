@@ -20,6 +20,7 @@ import {
   DatabaseCartItem,
 } from "../types/cart";
 import { Settings } from "../types/settings";
+import { CategoryWithChildren } from "../types/category";
 
 // 상품 목록 조회
 export async function getProducts(
@@ -472,5 +473,33 @@ export async function getCategoryMenu() {
     return [];
   }
 
-  return data || [];
+  if (!data) return [];
+
+  // DB 응답을 CategoryWithChildren 타입으로 변환 (snake_case -> camelCase)
+  const categories = data.map((item) => ({
+    id: item.id,
+    name: item.name,
+    parentId: item.parent_id,
+    createdAt: item.created_at,
+  }));
+
+  // 계층 구조 생성 (children 추가)
+  const categoryMap = new Map<number, CategoryWithChildren>(
+    categories.map((cat) => [cat.id, { ...cat, children: [] }])
+  );
+
+  categoryMap.forEach((category) => {
+    if (category.parentId !== null) {
+      const parent = categoryMap.get(category.parentId);
+      if (parent) {
+        if (!parent.children) {
+          parent.children = [];
+        }
+        parent.children.push(category);
+      }
+    }
+  });
+
+  // Map을 배열로 변환하여 반환
+  return Array.from(categoryMap.values());
 }

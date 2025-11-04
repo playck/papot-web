@@ -193,7 +193,7 @@ export default function SignInPage() {
         </div>
 
         {/* 소셜 로그인 (선택사항) */}
-        <div className="mt-6">
+        {/* <div className="mt-6">
           <div className="relative">
             <div className="absolute inset-0 flex items-center">
               <div className="w-full border-t border-border" />
@@ -231,7 +231,7 @@ export default function SignInPage() {
               Google로 로그인
             </button>
           </div>
-        </div>
+        </div> */}
 
         {/* 하단 텍스트 */}
         <div className="mt-8 text-center">

@@ -11,9 +11,10 @@ export function useOrder() {
   const { user } = useAuth();
 
   /**
-   * 주문 처리 함수
+   * 주문 생성 함수 (결제 완료 후 호출)
+   * @param impUid - 포트원 결제 고유번호
    */
-  const handlePayment = async () => {
+  const createOrderAfterPayment = async (impUid: string) => {
     if (!order) {
       return { success: false, error: "주문 정보가 없습니다." };
     }
@@ -26,13 +27,10 @@ export function useOrder() {
         throw new Error("주문 금액 계산에 오류가 있습니다.");
       }
 
-      const serverOrderData = OrderAdapter.toServerOrderData(order);
-      const serverOrderItemsData = OrderAdapter.toServerOrderItemsData(
-        order,
-        ""
-      );
+      const orderData = OrderAdapter.toServerOrderData(order);
+      const orderItemsData = OrderAdapter.toServerOrderItemsData(order, impUid);
 
-      const result = await createOrder(serverOrderData, serverOrderItemsData);
+      const result = await createOrder(orderData, orderItemsData);
 
       if (!result.success) {
         throw new Error(result.error || "주문 생성에 실패했습니다.");
@@ -62,7 +60,7 @@ export function useOrder() {
       const errorMessage =
         err instanceof Error
           ? err.message
-          : "결제 처리 중 오류가 발생했습니다.";
+          : "주문 생성 중 오류가 발생했습니다.";
 
       setError(errorMessage);
       return { success: false, error: errorMessage };
@@ -72,6 +70,6 @@ export function useOrder() {
   };
 
   return {
-    handlePayment,
+    createOrderAfterPayment,
   };
 }
