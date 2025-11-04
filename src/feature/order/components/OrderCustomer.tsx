@@ -15,8 +15,8 @@ export default function OrderCustomer({ customer }: OrderCustomerProps) {
   const { user } = useAuth();
   const { data: userProfile } = useUserProfile(user?.id);
 
-  // 사용자 정보로 자동 채우기
   useEffect(() => {
+    // 사용자 정보로 자동 채우기
     if (userProfile && !customer.email) {
       updateCustomer({
         name: userProfile.user_name || "",
@@ -24,7 +24,7 @@ export default function OrderCustomer({ customer }: OrderCustomerProps) {
         phone: userProfile.phone || "",
       });
     }
-  }, [userProfile, customer.email, updateCustomer]);
+  }, [userProfile]);
 
   const handleInputChange = (field: keyof OrderCustomerType, value: string) => {
     updateCustomer({

@@ -1,3 +1,3 @@
 export const formatKoreanPrice = (price: number) => {
-  return price.toLocaleString("ko-KR");
+  return `${price.toLocaleString("ko-KR")}원`;
 };

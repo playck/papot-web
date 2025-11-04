@@ -13,7 +13,7 @@ const paymentMethods: { value: PaymentMethod; label: string; icon: string }[] =
     { value: "trans", label: "실시간 계좌이체", icon: "🏦" },
   ];
 
-export function PaymentMethodSelector({
+export default function PaymentMethodSelector({
   selectedMethod,
   onSelectMethod,
 }: PaymentMethodSelectorProps) {
