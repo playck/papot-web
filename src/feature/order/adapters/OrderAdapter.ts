@@ -13,6 +13,8 @@ export class OrderAdapter {
    * 데이터베이스 주문 데이터를 ClientOrder로 변환
    */
   static toClientOrder(order: OrderWithUser): ClientOrder {
+    const isGuest = !order.customer_id || !order.profiles;
+
     const profile = order.profiles || {
       user_name: "",
       email: "",
@@ -22,17 +24,17 @@ export class OrderAdapter {
     return {
       id: order.id,
       orderNumber: order.order_number,
-      customerId: order.customer_id,
+      customerId: order.customer_id || null,
       customer: {
-        name: profile.user_name || "",
-        email: profile.email || "",
-        phone: profile.phone || "",
+        name: isGuest ? order.recipient_name : profile.user_name || "",
+        email: isGuest ? order.guest_email || "" : profile.email || "",
+        phone: isGuest ? order.recipient_phone : profile.phone || "",
       },
       items: (order.order_items || []).map((item) => ({
         id: item.id,
-        productId: item.product_id,
+        productId: item.product_id || "",
         product: {
-          id: item.product_id,
+          id: item.product_id || "",
           name: item.product_name,
           price: item.product_price,
           imageUrls: item.product_image_url ? [item.product_image_url] : [],
@@ -86,9 +88,13 @@ export class OrderAdapter {
    * ClientOrder를 서버 전송용 데이터로 변환
    */
   static toServerOrderData(order: ClientOrder): ServerOrderData {
+    const isGuest = !order.customerId;
+
     return {
       order_number: order.orderNumber,
-      customer_id: order.customerId,
+      customer_id: order.customerId || undefined, // null을 undefined로 변환
+      is_guest: isGuest,
+      guest_email: isGuest ? order.customer.email || undefined : undefined,
       recipient_name: order.shippingAddress.recipientName,
       recipient_phone: order.shippingAddress.phone,
       shipping_address: order.shippingAddress.address,

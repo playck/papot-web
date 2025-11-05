@@ -32,7 +32,7 @@ interface OrderState {
     items: PurchaseItem[];
     totalAmount: number;
     shippingFee?: number;
-    userId: string;
+    userId: string | null; // 비회원 허용
     customer?: OrderCustomer;
     shippingAddress?: ShippingAddress;
   }) => void;
@@ -107,7 +107,7 @@ export const useOrderStore = create<OrderState>()(
         const order: ClientOrder = {
           id: `order-${Date.now()}`,
           orderNumber: orderData.orderNumber,
-          customerId: orderData.userId,
+          customerId: orderData.userId || null, // 비회원은 null
           customer: orderData.customer || {
             name: "",
             email: "",

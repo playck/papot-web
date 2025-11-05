@@ -19,19 +19,13 @@ export function usePurchase() {
   const { createDirectOrder } = useOrderStore();
 
   const buyNow = (item: PurchaseItem) => {
-    if (!user) {
-      alert("로그인이 필요합니다.");
-      router.push("/signin");
-      return;
-    }
-
     const orderData = {
       orderNumber: `ORD-${dayjs().format("YYYYMMDD")}-${Date.now()}-${String(
         Math.floor(Math.random() * 1000)
       ).padStart(3, "0")}`,
       items: [item],
       totalAmount: item.price * item.quantity,
-      userId: user.id,
+      userId: user?.id || null, // 비회원은 null
     };
 
     createDirectOrder(orderData);

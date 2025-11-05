@@ -3,7 +3,6 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useOrderStore } from "@/feature/order/store/order";
-import { useAuth } from "@/shared/hooks/useAuth";
 import { usePayment } from "@/feature/order/hooks/usePayment";
 import { useOrder } from "@/feature/order/hooks/useOrder";
 import type { PaymentMethod, PaymentResponse } from "@/shared/types/payment";
@@ -17,7 +16,6 @@ import {
 
 export default function OrderPage() {
   const router = useRouter();
-  const { user } = useAuth();
   const { order, isProcessing } = useOrderStore();
   const { createOrderAfterPayment } = useOrder();
   const [selectedPaymentMethod, setSelectedPaymentMethod] =
@@ -78,7 +76,7 @@ export default function OrderPage() {
   });
 
   const handlePayment = async () => {
-    if (!order || !user) {
+    if (!order) {
       alert("주문 정보를 확인할 수 없습니다.");
       return;
     }

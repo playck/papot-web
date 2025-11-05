@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { Eye, EyeOff, Mail, Lock, Leaf } from "lucide-react";
+import { Eye, EyeOff, Mail, Lock } from "lucide-react";
 import { useSignIn } from "../services/hooks/useLogin";
 
 export default function SignInPage() {
@@ -78,16 +78,7 @@ export default function SignInPage() {
       <div className="w-full max-w-md">
         {/* 로고 및 헤더 */}
         <div className="text-center mb-10">
-          <Link
-            href="/"
-            className="inline-flex items-center justify-center mb-4"
-          >
-            <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary-600 text-white mr-3">
-              <Leaf className="h-6 w-6" />
-            </div>
-            <span className="text-2xl font-bold text-primary-700">Papot</span>
-          </Link>
-          <h1 className="text-2xl font-bold text-foreground mb-2">로그인</h1>
+          <h1 className="text-3xl font-bold text-foreground mb-2">로그인</h1>
         </div>
 
         {/* 로그인 폼 */}

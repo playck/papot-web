@@ -14,11 +14,6 @@ export default function CartSummary() {
   const finalTotal = totalPrice + deliveryFee;
 
   const handleOrderClick = () => {
-    if (!user) {
-      router.push("/signin");
-      return;
-    }
-
     if (items.length === 0) {
       alert("장바구니가 비어있습니다.");
       return;
@@ -35,9 +30,9 @@ export default function CartSummary() {
     createDirectOrder({
       orderNumber: `ORDER-${Date.now()}`,
       items: orderItems,
-      totalAmount: totalPrice, // 상품 가격
-      shippingFee: deliveryFee, // 배송비
-      userId: user.id,
+      totalAmount: totalPrice,
+      shippingFee: deliveryFee,
+      userId: user?.id || null, // 비회원은 null
     });
 
     router.push("/order");
