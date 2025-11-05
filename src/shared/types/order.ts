@@ -1,9 +1,11 @@
 import type { Database } from "../../types/supabase";
 
 export type OrderInsert = Database["public"]["Tables"]["orders"]["Insert"];
-export type OrderItemInsert = Database["public"]["Tables"]["order_items"]["Insert"];
+export type OrderItemInsert =
+  Database["public"]["Tables"]["order_items"]["Insert"];
 export type DatabaseOrder = Database["public"]["Tables"]["orders"]["Row"];
-export type DatabaseOrderItem = Database["public"]["Tables"]["order_items"]["Row"];
+export type DatabaseOrderItem =
+  Database["public"]["Tables"]["order_items"]["Row"];
 export type DatabaseProfile = Database["public"]["Tables"]["profiles"]["Row"];
 
 export interface ClientOrderItem {

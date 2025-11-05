@@ -14,6 +14,12 @@ export default function CartSummary() {
   const finalTotal = totalPrice + deliveryFee;
 
   const handleOrderClick = () => {
+    if (!user) {
+      alert("로그인이 필요합니다.");
+      router.push("/signin");
+      return;
+    }
+
     if (items.length === 0) {
       alert("장바구니가 비어있습니다.");
       return;
@@ -32,7 +38,7 @@ export default function CartSummary() {
       items: orderItems,
       totalAmount: totalPrice,
       shippingFee: deliveryFee,
-      userId: user?.id || null, // 비회원은 null
+      userId: user.id,
     });
 
     router.push("/order");

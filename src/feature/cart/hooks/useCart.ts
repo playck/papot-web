@@ -26,19 +26,24 @@ export const cartKeys = {
 };
 
 interface CartQueryData {
-  cart: { id: string };
+  cart: { id: string } | null;
   items: CartItem[];
 }
 
 export default function useCart() {
-  const { user } = useAuth();
   const queryClient = useQueryClient();
+  const { user } = useAuth();
 
   // 장바구니 조회
   const cartQuery = useQuery({
     queryKey: cartKeys.user(user?.id || ""),
     queryFn: async () => {
-      if (!user?.id) return null;
+      if (!user?.id) {
+        return {
+          cart: null,
+          items: [],
+        };
+      }
 
       const cart = await getUserCart(user.id);
 
@@ -61,14 +66,12 @@ export default function useCart() {
     enabled: !!user?.id,
   });
 
-  // 장바구니 아이템 추가
   const addItemMutation = useMutation({
     mutationFn: async (item: Omit<CartItem, "id">) => {
       if (!user?.id) throw new Error("로그인이 필요합니다");
 
       let cartId = cartQuery.data?.cart?.id;
 
-      // 장바구니가 없으면 생성
       if (!cartId) {
         const cart = await createUserCart(user.id);
 
@@ -76,7 +79,6 @@ export default function useCart() {
         cartId = cart.id;
       }
 
-      // 데이터베이스에 아이템 추가
       await addItemToCart(
         cartId,
         item.productId,
@@ -89,45 +91,35 @@ export default function useCart() {
       return item;
     },
     onMutate: async (newItem) => {
-      // 낙관적 업데이트
-      await queryClient.cancelQueries({
-        queryKey: cartKeys.user(user?.id || ""),
+      const queryKey = cartKeys.user(user?.id || "");
+
+      await queryClient.cancelQueries({ queryKey });
+
+      const previousData = queryClient.getQueryData(queryKey);
+
+      queryClient.setQueryData(queryKey, (old: CartQueryData | undefined) => {
+        if (!old) return old;
+
+        return {
+          ...old,
+          items: [...old.items, { ...newItem, id: `temp-${Date.now()}` }],
+        };
       });
-
-      const previousData = queryClient.getQueryData(
-        cartKeys.user(user?.id || "")
-      );
-
-      queryClient.setQueryData(
-        cartKeys.user(user?.id || ""),
-        (old: CartQueryData | undefined) => {
-          if (!old) return old;
-
-          return {
-            ...old,
-            items: [...old.items, { ...newItem, id: `temp-${Date.now()}` }],
-          };
-        }
-      );
 
       return { previousData };
     },
     onError: (err, newItem, context) => {
+      const queryKey = cartKeys.user(user?.id || "");
       if (context?.previousData) {
-        queryClient.setQueryData(
-          cartKeys.user(user?.id || ""),
-          context.previousData
-        );
+        queryClient.setQueryData(queryKey, context.previousData);
       }
     },
     onSettled: () => {
-      queryClient.invalidateQueries({
-        queryKey: cartKeys.user(user?.id || ""),
-      });
+      const queryKey = cartKeys.user(user?.id || "");
+      queryClient.invalidateQueries({ queryKey });
     },
   });
 
-  // 수량 업데이트
   const updateQuantityMutation = useMutation({
     mutationFn: async ({
       itemId,
@@ -140,133 +132,104 @@ export default function useCart() {
       return { itemId, quantity };
     },
     onMutate: async ({ itemId, quantity }) => {
-      // 낙관적 업데이트
-      await queryClient.cancelQueries({
-        queryKey: cartKeys.user(user?.id || ""),
+      const queryKey = cartKeys.user(user?.id || "");
+
+      await queryClient.cancelQueries({ queryKey });
+
+      const previousData = queryClient.getQueryData(queryKey);
+
+      queryClient.setQueryData(queryKey, (old: CartQueryData | undefined) => {
+        if (!old) return old;
+
+        return {
+          ...old,
+          items: old.items.map((item: CartItem) =>
+            item.id === itemId ? { ...item, quantity } : item
+          ),
+        };
       });
-
-      const previousData = queryClient.getQueryData(
-        cartKeys.user(user?.id || "")
-      );
-
-      queryClient.setQueryData(
-        cartKeys.user(user?.id || ""),
-        (old: CartQueryData | undefined) => {
-          if (!old) return old;
-
-          return {
-            ...old,
-            items: old.items.map((item: CartItem) =>
-              item.id === itemId ? { ...item, quantity } : item
-            ),
-          };
-        }
-      );
 
       return { previousData };
     },
     onError: (err, variables, context) => {
+      const queryKey = cartKeys.user(user?.id || "");
       if (context?.previousData) {
-        queryClient.setQueryData(
-          cartKeys.user(user?.id || ""),
-          context.previousData
-        );
+        queryClient.setQueryData(queryKey, context.previousData);
       }
     },
     onSettled: () => {
-      queryClient.invalidateQueries({
-        queryKey: cartKeys.user(user?.id || ""),
-      });
+      const queryKey = cartKeys.user(user?.id || "");
+      queryClient.invalidateQueries({ queryKey });
     },
   });
 
-  // 아이템 삭제
   const removeItemMutation = useMutation({
     mutationFn: async (itemId: string) => {
       await removeCartItem(itemId);
       return itemId;
     },
     onMutate: async (itemId) => {
-      // 낙관적 업데이트
-      await queryClient.cancelQueries({
-        queryKey: cartKeys.user(user?.id || ""),
+      const queryKey = cartKeys.user(user?.id || "");
+
+      await queryClient.cancelQueries({ queryKey });
+
+      const previousData = queryClient.getQueryData(queryKey);
+
+      queryClient.setQueryData(queryKey, (old: CartQueryData | undefined) => {
+        if (!old) return old;
+
+        return {
+          ...old,
+          items: old.items.filter((item: CartItem) => item.id !== itemId),
+        };
       });
-
-      const previousData = queryClient.getQueryData(
-        cartKeys.user(user?.id || "")
-      );
-
-      queryClient.setQueryData(
-        cartKeys.user(user?.id || ""),
-        (old: CartQueryData | undefined) => {
-          if (!old) return old;
-
-          return {
-            ...old,
-            items: old.items.filter((item: CartItem) => item.id !== itemId),
-          };
-        }
-      );
 
       return { previousData };
     },
     onError: (err, itemId, context) => {
+      const queryKey = cartKeys.user(user?.id || "");
       if (context?.previousData) {
-        queryClient.setQueryData(
-          cartKeys.user(user?.id || ""),
-          context.previousData
-        );
+        queryClient.setQueryData(queryKey, context.previousData);
       }
     },
     onSettled: () => {
-      queryClient.invalidateQueries({
-        queryKey: cartKeys.user(user?.id || ""),
-      });
+      const queryKey = cartKeys.user(user?.id || "");
+      queryClient.invalidateQueries({ queryKey });
     },
   });
 
-  // 장바구니 비우기
   const clearCartMutation = useMutation({
     mutationFn: async (cartId: string) => {
       await clearCartAPI(cartId);
       return cartId;
     },
     onMutate: async () => {
-      // 낙관적 업데이트
-      await queryClient.cancelQueries({
-        queryKey: cartKeys.user(user?.id || ""),
+      const queryKey = cartKeys.user(user?.id || "");
+
+      await queryClient.cancelQueries({ queryKey });
+
+      const previousData = queryClient.getQueryData(queryKey);
+
+      queryClient.setQueryData(queryKey, (old: CartQueryData | undefined) => {
+        if (!old) return old;
+
+        return {
+          ...old,
+          items: [],
+        };
       });
-
-      const previousData = queryClient.getQueryData(
-        cartKeys.user(user?.id || "")
-      );
-
-      queryClient.setQueryData(
-        cartKeys.user(user?.id || ""),
-        (old: CartQueryData | undefined) => {
-          if (!old) return old;
-
-          return {
-            ...old,
-            items: [],
-          };
-        }
-      );
 
       return { previousData };
     },
     onError: (err, cartId, context) => {
+      const queryKey = cartKeys.user(user?.id || "");
       if (context?.previousData) {
-        queryClient.setQueryData(
-          cartKeys.user(user?.id || ""),
-          context.previousData
-        );
+        queryClient.setQueryData(queryKey, context.previousData);
       }
     },
     onSettled: () => {
-      queryClient.invalidateQueries({
-        queryKey: cartKeys.user(user?.id || ""),
-      });
+      const queryKey = cartKeys.user(user?.id || "");
+      queryClient.invalidateQueries({ queryKey });
     },
   });
 
@@ -297,7 +260,7 @@ export default function useCart() {
       queryClient.invalidateQueries({
         queryKey: cartKeys.user(user?.id || ""),
       }),
-    handleAddItemToCart: (userId: string, item: Omit<CartItem, "id">) =>
+    handleAddItemToCart: (_: unknown, item: Omit<CartItem, "id">) =>
       addItemMutation.mutate(item),
     handleUpdateQuantity: (itemId: string, quantity: number) =>
       updateQuantityMutation.mutate({ itemId, quantity }),

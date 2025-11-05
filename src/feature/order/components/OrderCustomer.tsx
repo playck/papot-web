@@ -16,15 +16,16 @@ export default function OrderCustomer({ customer }: OrderCustomerProps) {
   const { data: userProfile } = useUserProfile(user?.id);
 
   useEffect(() => {
-    // 사용자 정보로 자동 채우기
-    if (userProfile && !customer.email) {
+    const isUserChecked = user && userProfile && !customer?.email;
+
+    if (isUserChecked) {
       updateCustomer({
-        name: userProfile.user_name || "",
-        email: userProfile.email || "",
-        phone: userProfile.phone || "",
+        name: userProfile?.user_name || "",
+        email: userProfile?.email || "",
+        phone: userProfile?.phone || "",
       });
     }
-  }, [userProfile]);
+  }, [user, userProfile, customer.email, updateCustomer]);
 
   const handleInputChange = (field: keyof OrderCustomerType, value: string) => {
     updateCustomer({
