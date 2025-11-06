@@ -5,9 +5,8 @@ import {
   Product,
   ProductListParams,
   ProductListResponse,
-  convertProductDataToClient,
 } from "../types/product";
-import { Product as DatabaseProduct } from "@/types/supabase";
+import { ProductAdapter } from "@/feature/product/detail/adapters";
 import {
   CreateOrderResponse,
   ServerOrderData,
@@ -63,8 +62,8 @@ export async function getProducts(
     throw new Error(`상품 목록 조회 실패: ${error.message}`);
   }
 
-  const products: Product[] = (data || []).map((item: DatabaseProduct) =>
-    convertProductDataToClient(item)
+  const products: Product[] = (data || []).map((item) =>
+    ProductAdapter.toClient(item)
   );
 
   return {
@@ -91,7 +90,7 @@ export async function getProduct(id: string): Promise<Product | null> {
     throw new Error(`상품 조회 실패: ${error.message}`);
   }
 
-  return convertProductDataToClient(data as DatabaseProduct);
+  return ProductAdapter.toClient(data);
 }
 
 // 카테고리 목록 조회

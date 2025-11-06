@@ -1,11 +1,10 @@
 import { createClient } from "@/services/supabase/server";
-import { Product as SupabaseProduct } from "@/types/supabase";
-import {
-  ProductListParams,
-  ProductListResponse,
-  convertProductDataToClient,
-} from "../types/product";
+import { ProductAdapter } from "@/feature/product/detail/adapters";
+import type { Database } from "@/types/supabase";
+import { ProductListParams, ProductListResponse } from "../types/product";
 import { Settings } from "../types/settings";
+
+type DatabaseProduct = Database["public"]["Tables"]["products"]["Row"];
 
 // 상품 목록 조회
 export async function getProducts(
@@ -55,8 +54,8 @@ export async function getProducts(
     };
   }
 
-  const products = (data || []).map((item: SupabaseProduct) =>
-    convertProductDataToClient(item)
+  const products = (data || []).map((item: DatabaseProduct) =>
+    ProductAdapter.toClient(item)
   );
 
   return {
@@ -67,7 +66,7 @@ export async function getProducts(
 }
 
 // 상품 상세 조회
-export async function getProduct(id: string): Promise<SupabaseProduct | null> {
+export async function getProduct(id: string): Promise<DatabaseProduct | null> {
   const supabase = await createClient();
 
   const { data, error } = await supabase
@@ -86,7 +85,7 @@ export async function getProduct(id: string): Promise<SupabaseProduct | null> {
     return null;
   }
 
-  return data as SupabaseProduct;
+  return data as DatabaseProduct;
 }
 
 // 카테고리 목록 조회

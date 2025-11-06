@@ -1,9 +1,9 @@
-import {
-  Cart as DbCart,
-  CartItem as DbCartItem,
-  CartInsert,
-  CartItemInsert,
-} from "../../types/supabase";
+import type { Database } from "../../types/supabase";
+
+type DbCart = Database["public"]["Tables"]["carts"]["Row"];
+type DbCartItem = Database["public"]["Tables"]["cart_items"]["Row"];
+type CartInsert = Database["public"]["Tables"]["carts"]["Insert"];
+type CartItemInsert = Database["public"]["Tables"]["cart_items"]["Insert"];
 
 // 장바구니 아이템 타입
 export interface CartItem {
