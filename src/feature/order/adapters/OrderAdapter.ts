@@ -3,6 +3,7 @@ import {
   OrderWithUser,
   ServerOrderData,
   ServerOrderItemData,
+  DatabaseOrderItem,
 } from "@/shared/types/order";
 
 /**
@@ -10,9 +11,77 @@ import {
  */
 export class OrderAdapter {
   /**
+   * 주문 필수 필드 검증
+   */
+  private static validateOrder(order: OrderWithUser): void {
+    if (!order) {
+      throw new Error("주문 데이터가 없습니다.");
+    }
+    if (!order.id) {
+      throw new Error("주문 ID가 없습니다.");
+    }
+    if (!order.order_number) {
+      throw new Error("주문 번호가 없습니다.");
+    }
+    if (!order.recipient_name) {
+      throw new Error("수령인 이름이 없습니다.");
+    }
+    if (!order.recipient_phone) {
+      throw new Error("수령인 연락처가 없습니다.");
+    }
+    if (!order.shipping_address) {
+      throw new Error("배송 주소가 없습니다.");
+    }
+    if (!order.shipping_zip_code) {
+      throw new Error("우편번호가 없습니다.");
+    }
+    if (
+      order.total_product_price === null ||
+      order.total_product_price === undefined
+    ) {
+      throw new Error("상품 총액이 없습니다.");
+    }
+    if (order.final_price === null || order.final_price === undefined) {
+      throw new Error("최종 결제 금액이 없습니다.");
+    }
+    if (!order.status) {
+      throw new Error("주문 상태가 없습니다.");
+    }
+    if (!order.created_at) {
+      throw new Error("주문 생성일이 없습니다.");
+    }
+  }
+
+  /**
+   * 주문 아이템 필수 필드 검증
+   */
+  private static validateOrderItem(item: DatabaseOrderItem): void {
+    if (!item.id) {
+      throw new Error("주문 아이템 ID가 없습니다.");
+    }
+    if (!item.product_id) {
+      throw new Error("상품 ID가 없습니다.");
+    }
+    if (!item.product_name) {
+      throw new Error("상품명이 없습니다.");
+    }
+    if (item.quantity === null || item.quantity === undefined) {
+      throw new Error("수량이 없습니다.");
+    }
+    if (item.unit_price === null || item.unit_price === undefined) {
+      throw new Error("단가가 없습니다.");
+    }
+    if (item.total_price === null || item.total_price === undefined) {
+      throw new Error("총액이 없습니다.");
+    }
+  }
+
+  /**
    * 데이터베이스 주문 데이터를 ClientOrder로 변환
    */
   static toClientOrder(order: OrderWithUser): ClientOrder {
+    this.validateOrder(order);
+
     const isGuest = !order.customer_id || !order.profiles;
 
     const profile = order.profiles || {
@@ -26,23 +95,32 @@ export class OrderAdapter {
       orderNumber: order.order_number,
       customerId: order.customer_id || null,
       customer: {
-        name: isGuest ? order.recipient_name : profile.user_name || "",
+        name: isGuest
+          ? order.recipient_name
+          : profile.user_name || order.recipient_name,
         email: isGuest ? order.guest_email || "" : profile.email || "",
-        phone: isGuest ? order.recipient_phone : profile.phone || "",
+        phone: isGuest
+          ? order.recipient_phone
+          : profile.phone || order.recipient_phone,
       },
-      items: (order.order_items || []).map((item) => ({
-        id: item.id,
-        productId: item.product_id || "",
-        product: {
-          id: item.product_id || "",
-          name: item.product_name,
-          price: item.product_price,
-          imageUrls: item.product_image_url ? [item.product_image_url] : [],
-        },
-        quantity: item.quantity,
-        unitPrice: item.unit_price,
-        totalPrice: item.total_price,
-      })),
+      items: (order.order_items || []).map((item) => {
+        this.validateOrderItem(item);
+
+        // 검증 후 필수 필드는 null이 아님이 보장됨
+        return {
+          id: item.id,
+          productId: item.product_id!,
+          product: {
+            id: item.product_id!,
+            name: item.product_name,
+            price: item.product_price || item.unit_price,
+            imageUrls: item.product_image_url ? [item.product_image_url] : [],
+          },
+          quantity: item.quantity,
+          unitPrice: item.unit_price,
+          totalPrice: item.total_price,
+        };
+      }),
       shippingAddress: {
         recipientName: order.recipient_name,
         phone: order.recipient_phone,
@@ -53,14 +131,14 @@ export class OrderAdapter {
       },
       summary: {
         totalProductPrice: order.total_product_price,
-        shippingFee: order.shipping_fee,
-        couponDiscount: order.coupon_discount,
-        pointDiscount: order.point_discount,
+        shippingFee: order.shipping_fee || 0,
+        couponDiscount: order.coupon_discount || 0,
+        pointDiscount: order.point_discount || 0,
         finalPrice: order.final_price,
       },
       status: order.status as ClientOrder["status"],
       createdAt: new Date(order.created_at),
-      updatedAt: new Date(order.updated_at),
+      updatedAt: new Date(order.updated_at || order.created_at),
     };
   }
 
@@ -68,7 +146,20 @@ export class OrderAdapter {
    * 데이터베이스 주문 목록을 ClientOrder 배열로 변환
    */
   static toClientOrders(orders: OrderWithUser[]): ClientOrder[] {
-    return orders?.map((order) => this.toClientOrder(order));
+    if (!orders || !Array.isArray(orders)) {
+      return [];
+    }
+
+    return orders
+      .map((order) => {
+        try {
+          return this.toClientOrder(order);
+        } catch (error) {
+          console.error("주문 변환 중 오류:", error, order);
+          return null;
+        }
+      })
+      .filter((order): order is ClientOrder => order !== null);
   }
 
   /**
