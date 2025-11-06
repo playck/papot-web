@@ -64,7 +64,6 @@ export default function OrderSideBar({
             </span>
             <div className="text-xl font-bold text-primary-600">
               <span>{formatKoreanPrice(summary.finalPrice)}</span>
-              <span className="text-sm text-neutral-600"> 원</span>
             </div>
           </div>
           <div className="text-right mt-1">

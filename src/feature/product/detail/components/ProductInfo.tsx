@@ -47,7 +47,7 @@ export default function ProductInfo({
         {hasDiscount && discountRate && (
           <div className="flex items-center gap-2">
             <span className="text-lg text-neutral-400 line-through">
-              {formatKoreanPrice(originalPrice)}원
+              {formatKoreanPrice(originalPrice)}
             </span>
             <span className="px-2 py-1 bg-primary-600 text-white text-sm font-medium rounded">
               {discountRate}%
@@ -59,7 +59,6 @@ export default function ProductInfo({
           <span className="text-3xl md:text-4xl font-bold text-neutral-900">
             {formatKoreanPrice(finalPrice)}
           </span>
-          <span className="text-xl text-neutral-600">원</span>
           {hasDiscount && (
             <span className="text-lg text-primary-600 font-medium">
               쿠폰적용시
@@ -81,10 +80,10 @@ export default function ProductInfo({
           <span className="text-sm text-neutral-600">배송</span>
           <div className="flex items-center gap-1">
             <span className="text-sm font-medium text-neutral-900">
-              {formatKoreanPrice(shippingFee)}원
+              {formatKoreanPrice(shippingFee)}
             </span>
             <span className="text-xs text-neutral-500">
-              ({formatKoreanPrice(shippingThreshold)}원 이상 구매시 무료배송)
+              ({formatKoreanPrice(shippingThreshold)} 이상 구매시 무료배송)
             </span>
           </div>
         </div>

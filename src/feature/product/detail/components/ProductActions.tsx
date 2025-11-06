@@ -78,7 +78,6 @@ export default function ProductActions({
           <span className="text-2xl font-bold text-neutral-900">
             {price ? formatKoreanPrice(price * quantity) : "0"}
           </span>
-          <span className="text-lg text-neutral-600 ml-1">원</span>
         </div>
       </div>
 

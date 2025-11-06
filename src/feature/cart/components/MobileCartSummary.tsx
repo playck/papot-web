@@ -12,7 +12,7 @@ export default function MobileCartSummary() {
       <div className="flex flex-col">
         <span className="text-xs text-gray-500">총 결제 금액</span>
         <span className="text-xl font-bold text-gray-900">
-          {formatKoreanPrice(finalTotal)}원
+          {formatKoreanPrice(finalTotal)}
         </span>
       </div>
 

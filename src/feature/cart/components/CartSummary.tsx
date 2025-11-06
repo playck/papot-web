@@ -56,15 +56,13 @@ export default function CartSummary() {
 
         <div className="flex justify-between text-sm">
           <span className="text-gray-600">상품 금액</span>
-          <span className="text-gray-900">
-            {formatKoreanPrice(totalPrice)}원
-          </span>
+          <span className="text-gray-900">{formatKoreanPrice(totalPrice)}</span>
         </div>
 
         <div className="flex justify-between text-sm">
           <span className="text-gray-600">배송비</span>
           <span className="text-gray-900">
-            {deliveryFee === 0 ? "무료" : `${formatKoreanPrice(deliveryFee)}원`}
+            {deliveryFee === 0 ? "무료" : `${formatKoreanPrice(deliveryFee)}`}
           </span>
         </div>
 
@@ -72,9 +70,7 @@ export default function CartSummary() {
 
         <div className="flex justify-between text-lg font-semibold">
           <span className="text-gray-900">총 결제 금액</span>
-          <span className="text-gray-900">
-            {formatKoreanPrice(finalTotal)}원
-          </span>
+          <span className="text-gray-900">{formatKoreanPrice(finalTotal)}</span>
         </div>
       </div>
 

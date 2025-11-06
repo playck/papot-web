@@ -59,7 +59,7 @@ export default function CartItem({ item, isLast = false }: CartItemProps) {
           </Link>
 
           <div className="mt-2 text-lg font-semibold text-gray-900">
-            {formatKoreanPrice(item.price)}원
+            {formatKoreanPrice(item.price)}
           </div>
         </div>
 
@@ -74,7 +74,7 @@ export default function CartItem({ item, isLast = false }: CartItemProps) {
 
           {/* 총 가격 */}
           <div className="text-xl font-bold text-gray-900">
-            {formatKoreanPrice(item.price * item.quantity)}원
+            {formatKoreanPrice(item.price * item.quantity)}
           </div>
 
           <Counter
@@ -125,7 +125,7 @@ export default function CartItem({ item, isLast = false }: CartItemProps) {
               </h3>
             </Link>
             <div className="mt-1 text-base font-semibold text-gray-900">
-              {formatKoreanPrice(item.price)}원
+              {formatKoreanPrice(item.price)}
             </div>
           </div>
 
@@ -142,7 +142,7 @@ export default function CartItem({ item, isLast = false }: CartItemProps) {
           <div className="flex flex-col items-end gap-2">
             {/* 총가격 */}
             <div className="text-lg font-bold text-gray-900">
-              {formatKoreanPrice(item.price * item.quantity)}원
+              {formatKoreanPrice(item.price * item.quantity)}
             </div>
             {/* 수량조절 */}
             <Counter
