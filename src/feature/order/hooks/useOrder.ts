@@ -1,6 +1,13 @@
 import { useRouter } from "next/navigation";
-import { createOrder, getUserCart, clearCart } from "@/shared/api/client-api";
+import { useQuery } from "@tanstack/react-query";
+import {
+  createOrder,
+  getUserCart,
+  clearCart,
+  getUserOrders,
+} from "@/shared/api/client-api";
 import { useAuth } from "@/shared/hooks/useAuth";
+import type { OrderWithUser } from "@/shared/types/order";
 import { useOrderStore } from "../store/order";
 import { OrderAdapter } from "../adapters/OrderAdapter";
 import { validateOrderTotal } from "../utils/order";
@@ -72,4 +79,25 @@ export function useOrder() {
   return {
     createOrderAfterPayment,
   };
+}
+
+/**
+ * 사용자 주문 목록 조회 훅
+ */
+export function useUserOrderList(userId: string | undefined) {
+  return useQuery({
+    queryKey: ["userOrders", userId],
+    queryFn: async () => {
+      if (!userId) return [];
+      const orders = await getUserOrders(userId);
+      return orders || [];
+    },
+    select: (orders) => {
+      if (!orders || !Array.isArray(orders) || orders.length === 0) {
+        return [];
+      }
+      return OrderAdapter.toClientOrders(orders as OrderWithUser[]);
+    },
+    enabled: !!userId,
+  });
 }

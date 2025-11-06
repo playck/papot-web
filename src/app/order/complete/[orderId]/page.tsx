@@ -2,47 +2,37 @@
 
 import { useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
-import { useQuery } from "@tanstack/react-query";
-import { getUserOrders } from "@/shared/api/client-api";
 import { useAuth, useUserProfile } from "@/shared/hooks/useAuth";
-import { OrderAdapter } from "@/feature/order/adapters/OrderAdapter";
-import { OrderWithUser } from "@/shared/types/order";
 import PageLoader from "@/shared/components/PageLoader";
 import PageError from "@/shared/components/PageError";
 import { formatKoreanPrice } from "@/shared/utils/price";
+import { useOrderStore } from "@/feature/order/store/order";
+import { useUserOrderList } from "@/feature/order/hooks/useOrder";
 
 export default function OrderCompletePage() {
   const params = useParams();
   const router = useRouter();
   const { user, loading: authLoading } = useAuth();
   const { data: profile, isLoading: profileLoading } = useUserProfile(user?.id);
+  const { data: orders, isLoading, error } = useUserOrderList(user?.id);
+  const { order: storeOrder } = useOrderStore();
   const orderId = params.orderId as string;
 
-  const {
-    data: orders,
-    isLoading,
-    error,
-  } = useQuery({
-    queryKey: ["userOrders", user?.id],
-    queryFn: async () => {
-      const orders = await getUserOrders(user!.id);
-      return OrderAdapter.toClientOrders(orders as OrderWithUser[]);
-    },
-    enabled: !!user?.id,
-  });
-
-  const currentOrder = orders?.find((order) => order.id === orderId);
+  // 회원: 서버에서 가져온 주문, 비회원: store의 주문
+  const currentOrder = user?.id
+    ? orders?.find((order) => order.id === orderId)
+    : storeOrder?.id === orderId
+    ? storeOrder
+    : null;
 
   useEffect(() => {
-    const isUnauthorizedAccess =
-      !user?.id || !!(currentOrder?.customerId !== user?.id);
-
-    if (isUnauthorizedAccess) {
-      router.push("/mypage");
+    // 비회원인데 store에 주문 정보가 없으면 주문 조회 페이지로
+    if (!user?.id && !storeOrder) {
+      router.push("/order/guest-lookup");
     }
-  }, [currentOrder, user?.id, router]);
+  }, [user?.id, storeOrder, router]);
 
-  if (authLoading || profileLoading || isLoading) {
+  if (authLoading || (user?.id && (profileLoading || isLoading))) {
     return (
       <PageLoader
         title="주문 완료"
@@ -51,7 +41,7 @@ export default function OrderCompletePage() {
     );
   }
 
-  if (!user || !profile) {
+  if (user?.id && !profile) {
     return null;
   }
 
@@ -61,10 +51,13 @@ export default function OrderCompletePage() {
     );
   }
 
+  const displayName = user?.id
+    ? profile?.user_name || user.email.split("@")[0]
+    : currentOrder.customer.name;
+
   return (
     <div className="min-h-screen bg-neutral-50">
       <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        {/* 완료 아이콘 */}
         <div className="text-center mb-8">
           <div className="inline-flex items-center justify-center w-20 h-20 bg-green-100 rounded-full mb-4">
             <svg
@@ -85,8 +78,7 @@ export default function OrderCompletePage() {
             주문이 완료되었습니다
           </h1>
           <p className="text-neutral-600">
-            {profile.user_name || user.email.split("@")[0]}님, 주문해주셔서
-            감사합니다. 빠르게 배송해드리겠습니다.
+            {displayName}님, 주문해주셔서 감사합니다. 빠르게 배송해드리겠습니다.
           </p>
         </div>
 
@@ -193,7 +185,9 @@ export default function OrderCompletePage() {
             쇼핑 계속하기
           </button>
           <button
-            onClick={() => router.push("/mypage")}
+            onClick={() =>
+              router.push(user?.id ? "/mypage" : "/order/guest-lookup")
+            }
             className="flex-1 py-3 px-6 bg-primary-600 hover:bg-primary-700 text-white font-medium rounded-lg transition-colors"
           >
             주문 내역 보기
