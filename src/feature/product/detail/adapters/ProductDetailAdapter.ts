@@ -1,5 +1,8 @@
-import { Product } from "@/types/supabase";
+import type { Database } from "@/types/supabase";
 import { Product as ProductType } from "@/shared/types/product";
+import { ProductAdapter } from "./ProductAdapter";
+
+type DatabaseProduct = Database["public"]["Tables"]["products"]["Row"];
 
 /**
  * 상품 상세 표시 정보 타입
@@ -12,34 +15,14 @@ export interface ProductDetailInfo extends ProductType {
 }
 
 /**
- * 상품 상세 정보 어댑터 */
+ * 상품 상세 정보 어댑터
+ */
 export class ProductDetailAdapter {
   /**
-   * ProductData를 클라이언트 Product로 변환 (표시 정보 포함)
+   * ProductData를 클라이언트 Product로 변환
    */
-  static toClient(data: Product): ProductDetailInfo {
-    const baseProduct: ProductType = {
-      id: data.id,
-      name: data.name,
-      description: data.description || undefined,
-      detailDescription: data.detail_description || undefined,
-      price: data.price,
-      discountRate: data.discount_rate || undefined,
-      quantity: data.quantity,
-      isPublished: data.is_published ?? false,
-      categoryId: data.category_id || undefined,
-      badges: Array.isArray(data.badges)
-        ? data.badges.filter(
-            (badge): badge is string => typeof badge === "string"
-          )
-        : undefined,
-      uploadedBy: data.uploaded_by || "",
-      createdAt: new Date(data.created_at || new Date()),
-      updatedAt: new Date(data.updated_at || new Date()),
-      imageUrls: data.image_urls || [],
-    };
-
-    // 할인 가격 계산
+  static toClient(data: DatabaseProduct): ProductDetailInfo {
+    const baseProduct = ProductAdapter.toClient(data);
     const discountedPrice = this.calculateDiscountedPrice(baseProduct);
 
     return {
@@ -55,7 +38,7 @@ export class ProductDetailAdapter {
   /**
    * 상품 목록 변환
    */
-  static toClientList(data: Product[]): ProductDetailInfo[] {
+  static toClientList(data: DatabaseProduct[]): ProductDetailInfo[] {
     return data.map(this.toClient);
   }
 
