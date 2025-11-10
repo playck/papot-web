@@ -183,9 +183,9 @@ export class OrderAdapter {
 
     return {
       order_number: order.orderNumber,
-      customer_id: order.customerId || undefined, // null을 undefined로 변환
+      customer_id: order.customerId || null, // 비회원은 null
       is_guest: isGuest,
-      guest_email: isGuest ? order.customer.email || undefined : undefined,
+      guest_email: isGuest ? order.customer.email || null : null,
       recipient_name: order.shippingAddress.recipientName,
       recipient_phone: order.shippingAddress.phone,
       shipping_address: order.shippingAddress.address,

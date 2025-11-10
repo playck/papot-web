@@ -163,6 +163,10 @@ export async function createOrder(
       return { success: false, error: orderError.message };
     }
 
+    if (!orderResult?.id) {
+      return { success: false, error: "주문 ID를 받지 못했습니다." };
+    }
+
     const orderId = orderResult.id;
 
     // 주문 아이템들에 orderId 추가
