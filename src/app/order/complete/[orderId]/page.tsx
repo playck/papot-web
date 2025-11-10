@@ -156,22 +156,34 @@ export default function OrderCompletePage() {
           <h2 className="text-lg font-semibold text-neutral-900 mb-4">
             배송 정보
           </h2>
-          <div className="space-y-2 text-neutral-700">
-            <p>
-              <span className="font-medium">
+          <div className="space-y-3">
+            <div className="flex gap-2">
+              <span className="text-neutral-600 min-w-20">수령인</span>
+              <span className="font-medium text-neutral-900">
                 {currentOrder.shippingAddress.recipientName}
               </span>
-            </p>
-            <p>{currentOrder.shippingAddress.phone}</p>
-            <p>
-              {currentOrder.shippingAddress.zipCode}{" "}
-              {currentOrder.shippingAddress.address}{" "}
-              {currentOrder.shippingAddress.detailAddress}
-            </p>
+            </div>
+            <div className="flex gap-2">
+              <span className="text-neutral-600 min-w-20">연락처</span>
+              <span className="font-medium text-neutral-900">
+                {currentOrder.shippingAddress.phone}
+              </span>
+            </div>
+            <div className="flex gap-2">
+              <span className="text-neutral-600 min-w-20">주소</span>
+              <span className="font-medium text-neutral-900">
+                ({currentOrder.shippingAddress.zipCode}){" "}
+                {currentOrder.shippingAddress.address}{" "}
+                {currentOrder.shippingAddress.detailAddress}
+              </span>
+            </div>
             {currentOrder.shippingAddress.deliveryRequest && (
-              <p className="text-sm text-neutral-600 mt-2">
-                요청사항: {currentOrder.shippingAddress.deliveryRequest}
-              </p>
+              <div className="flex gap-2">
+                <span className="text-neutral-600 min-w-20">배송 요청</span>
+                <span className="text-neutral-900">
+                  {currentOrder.shippingAddress.deliveryRequest}
+                </span>
+              </div>
             )}
           </div>
         </div>
