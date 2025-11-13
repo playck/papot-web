@@ -2,7 +2,7 @@ export const CATEGORIES = {
   POTS: {
     id: 1,
     name: "화분",
-    slug: "pots",
+    slug: "pot",
   },
   CERAMIC: {
     id: 2,
