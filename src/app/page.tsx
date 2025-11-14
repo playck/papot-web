@@ -10,12 +10,12 @@ export default async function Home() {
     <div className="min-h-screen">
       <IntroBanner bannerImageUrl={bannerImageUrl} />
       <CategorySection
-        title={CATEGORIES.POTS.name}
+        title={CATEGORIES.POTS.slug.toUpperCase()}
         category={CATEGORIES.POTS.id.toString()}
       />
       <CategorySection
-        title={CATEGORIES.CERAMIC.name}
-        category={CATEGORIES.CERAMIC.id.toString()}
+        title={CATEGORIES.PLATE.slug.toUpperCase()}
+        category={CATEGORIES.PLATE.id.toString()}
       />
     </div>
   );
