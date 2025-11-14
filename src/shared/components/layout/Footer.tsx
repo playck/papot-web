@@ -79,7 +79,7 @@ const Footer = () => {
               <span className="hidden md:inline">|</span>
               <span>
                 <strong className="text-gray-700">이메일:</strong>{" "}
-                playck@naver.com
+                sklee8631@gmail.com
               </span>
             </div>
             <div>

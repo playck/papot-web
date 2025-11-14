@@ -211,8 +211,8 @@ function ServiceTermContent() {
           </li>
           <li>
             배송 중 파손 또는 오배송이 발생한 경우, 파팟은 이에 대한 책임을 지며
-            이용자는 고객센터(032-715-4014, playck@naver.com)로 문의하여 재배송
-            또는 환불을 요청할 수 있습니다.
+            이용자는 고객센터(032-715-4014, sklee8631@gmail.com)로 문의하여
+            재배송 또는 환불을 요청할 수 있습니다.
           </li>
         </ul>
       </section>
@@ -462,7 +462,7 @@ function PrivacyTermContent() {
             <br />
             직책: 대표
             <br />
-            이메일: playck@naver.com
+            이메일: sklee8631@gmail.com
             <br />
             전화번호: 032-715-4014
           </p>
@@ -589,7 +589,7 @@ function FinanceTermContent() {
             <br />
             전화번호: 032-715-4014
             <br />
-            이메일: playck@naver.com
+            이메일: sklee8631@gmail.com
           </p>
         </div>
         <p className="text-gray-700 leading-relaxed">
@@ -723,7 +723,7 @@ function RefundTermContent() {
             <strong>전화:</strong> 032-715-4014 (평일 12:00 - 20:00, 목요일
             휴무)
             <br />
-            <strong>이메일:</strong> playck@naver.com
+            <strong>이메일:</strong> sklee8631@gmail.com
           </p>
         </div>
       </section>
