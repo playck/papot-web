@@ -4,10 +4,10 @@ export const CATEGORIES = {
     name: "화분",
     slug: "pot",
   },
-  CERAMIC: {
+  PLATE: {
     id: 2,
     name: "도자기 / 그릇",
-    slug: "ceramic",
+    slug: "plate",
   },
 } as const;
 
