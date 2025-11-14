@@ -1,19 +1,11 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
 
 const Footer = () => {
-  const pathname = usePathname();
-  const isMainPage = pathname === "/";
-
   return (
     <footer className="bg-gray-50 border-t border-gray-200 mt-auto">
-      <div
-        className={`container ${
-          isMainPage ? "max-w-10xl" : "max-w-7xl"
-        } mx-auto px-4 py-12`}
-      >
+      <div className="container max-w-10xl mx-auto px-4 py-12">
         {/* 상단 영역 */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-6">
           {/* 회사 소개 */}
