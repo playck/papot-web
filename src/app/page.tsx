@@ -7,7 +7,7 @@ export default async function Home() {
   const bannerImageUrl = settings?.main_image_url || null;
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen pb-12 md:pb-30">
       <IntroBanner bannerImageUrl={bannerImageUrl} />
       <CategorySection
         title={CATEGORIES.PLANTS.slug.toUpperCase()}

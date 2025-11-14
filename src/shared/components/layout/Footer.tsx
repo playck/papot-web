@@ -18,8 +18,8 @@ const Footer = () => {
         </div>
 
         {/* 약관 및 정책 링크 */}
-        <div className="py-3">
-          <div className="flex flex-wrap justify-center md:justify-start gap-3 md:gap-6 text-sm">
+        <div className="py-2 md:py-3">
+          <div className="flex flex-wrap md:justify-start gap-3 md:gap-6 text-sm">
             <Link
               href="/terms?tab=service"
               className="text-gray-700 hover:text-gray-900 font-medium transition-colors"
@@ -51,7 +51,7 @@ const Footer = () => {
         </div>
 
         {/* 사업자 정보 */}
-        <div className="pt-6">
+        <div className="pt-4 md:pt-6">
           <div className="text-sm text-gray-600 space-y-2">
             <div className="flex flex-col md:flex-row md:space-x-4 space-y-1 md:space-y-0">
               <span>
