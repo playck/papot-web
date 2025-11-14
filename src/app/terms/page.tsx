@@ -206,12 +206,12 @@ function ServiceTermContent() {
             배송기간을 초과한 경우 이용자의 손해를 배상합니다.
           </li>
           <li>
-            배송비는 5만원 이상 구매 시 무료이며, 5만원 미만 시 3,000원이
+            배송비는 10만원 이상 구매 시 무료이며, 10만원 미만 시 4,000원이
             부과됩니다. 도서산간 지역은 추가 배송비가 발생할 수 있습니다.
           </li>
           <li>
             배송 중 파손 또는 오배송이 발생한 경우, 파팟은 이에 대한 책임을 지며
-            이용자는 고객센터(010-5205-8631, playck@naver.com)로 문의하여 재배송
+            이용자는 고객센터(032-715-4014, playck@naver.com)로 문의하여 재배송
             또는 환불을 요청할 수 있습니다.
           </li>
         </ul>
@@ -464,7 +464,7 @@ function PrivacyTermContent() {
             <br />
             이메일: playck@naver.com
             <br />
-            전화번호: 010-5205-8631
+            전화번호: 032-715-4014
           </p>
         </div>
       </section>
@@ -587,7 +587,7 @@ function FinanceTermContent() {
             <strong className="block mb-2">분쟁처리 책임자</strong>
             성명: 이수경
             <br />
-            전화번호: 010-5205-8631
+            전화번호: 032-715-4014
             <br />
             이메일: playck@naver.com
           </p>
@@ -658,14 +658,14 @@ function RefundTermContent() {
         <div className="bg-blue-50 border border-blue-200 p-4 rounded-lg">
           <p className="text-gray-700 mb-3">
             <strong className="block mb-2">배송비</strong>
-            - 기본 배송비: 무료 (8만원 이상 구매 시)
+            - 기본 배송비: 무료 (10만원 이상 구매 시)
             <br />
-            - 5만원 미만 구매 시: 5,000원
+            - 10만원 미만 구매 시: 4,000원
             <br />- 도서산간 지역: 추가 배송비 발생 가능
           </p>
           <p className="text-gray-700">
             <strong className="block mb-2">반품비용</strong>
-            - 단순 변심에 의한 반품: 왕복 배송비(10,000원) 고객 부담
+            - 단순 변심에 의한 반품: 왕복 배송비(8,000원) 고객 부담
             <br />- 상품 하자/오배송: 파팟 부담
           </p>
         </div>
@@ -720,7 +720,7 @@ function RefundTermContent() {
             바랍니다.
             <br />
             <br />
-            <strong>전화:</strong> 010-5205-8631 (평일 12:00 - 20:00, 목요일
+            <strong>전화:</strong> 032-715-4014 (평일 12:00 - 20:00, 목요일
             휴무)
             <br />
             <strong>이메일:</strong> playck@naver.com

@@ -10,7 +10,7 @@ export default function CartSummary() {
   const { items, totalItems, totalPrice } = useCart();
   const { createDirectOrder } = useOrderStore();
 
-  const deliveryFee = totalPrice >= 80000 ? 0 : 3000;
+  const deliveryFee = totalPrice >= 100000 ? 0 : 4000; // 10만원 이상 무료배송
   const finalTotal = totalPrice + deliveryFee;
 
   const handleOrderClick = () => {

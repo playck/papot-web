@@ -4,7 +4,7 @@ import { useCart } from "@/feature/cart/hooks";
 export default function MobileCartSummary() {
   const { totalPrice } = useCart();
 
-  const deliveryFee = totalPrice >= 50000 ? 0 : 3000; // 5만원 이상 무료배송
+  const deliveryFee = totalPrice >= 100000 ? 0 : 4000; // 10만원 이상 무료배송
   const finalTotal = totalPrice + deliveryFee;
 
   return (
