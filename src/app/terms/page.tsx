@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 
 type TermType = "service" | "privacy" | "finance" | "refund";
@@ -18,7 +18,7 @@ const termMenuItems: TermMenuItem[] = [
   { id: "refund", title: "환불/취소 정책" },
 ];
 
-export default function TermsPage() {
+function TermsContent() {
   const searchParams = useSearchParams();
   const tabParam = searchParams.get("tab") as TermType | null;
 
@@ -70,6 +70,18 @@ export default function TermsPage() {
         </main>
       </div>
     </div>
+  );
+}
+
+export default function TermsPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-primary-600"></div>
+      }
+    >
+      <TermsContent />
+    </Suspense>
   );
 }
 
