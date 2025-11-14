@@ -1,13 +1,13 @@
 export const CATEGORIES = {
-  POTS: {
+  PLANTS: {
     id: 1,
+    name: "식물",
+    slug: "plant",
+  },
+  POTS: {
+    id: 2,
     name: "화분",
     slug: "pot",
-  },
-  PLATE: {
-    id: 2,
-    name: "도자기 / 그릇",
-    slug: "plate",
   },
 } as const;
 
