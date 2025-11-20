@@ -10,7 +10,7 @@ interface PaymentMethodSelectorProps {
 const paymentMethods: { value: PaymentMethod; label: string; icon: string }[] =
   [
     { value: "card", label: "신용/체크카드", icon: "💳" },
-    { value: "trans", label: "실시간 계좌이체", icon: "🏦" },
+    // { value: "trans", label: "실시간 계좌이체", icon: "🏦" },
   ];
 
 export default function PaymentMethodSelector({
