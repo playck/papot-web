@@ -1,8 +1,8 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import dayjs from "dayjs";
 import { useOrderStore } from "@/feature/order/store/order";
+import { OrderAdapter } from "@/feature/order/adapters/OrderAdapter";
 import { useAuth } from "./useAuth";
 
 export interface PurchaseItem {
@@ -20,9 +20,7 @@ export function usePurchase() {
 
   const buyNow = (item: PurchaseItem) => {
     const orderData = {
-      orderNumber: `ORD-${dayjs().format("YYYYMMDD")}-${Date.now()}-${String(
-        Math.floor(Math.random() * 1000)
-      ).padStart(3, "0")}`,
+      orderNumber: OrderAdapter.generateOrderNumber(),
       items: [item],
       totalAmount: item.price * item.quantity,
       userId: user?.id || null, // 비회원은 null

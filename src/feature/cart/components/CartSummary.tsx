@@ -3,6 +3,7 @@ import { formatKoreanPrice } from "@/shared/utils/price";
 import { useAuth } from "@/shared/hooks/useAuth";
 import { useCart } from "@/feature/cart/hooks";
 import { useOrderStore } from "@/feature/order/store/order";
+import { OrderAdapter } from "@/feature/order/adapters/OrderAdapter";
 
 export default function CartSummary() {
   const router = useRouter();
@@ -34,7 +35,7 @@ export default function CartSummary() {
     }));
 
     createDirectOrder({
-      orderNumber: `ORDER-${Date.now()}`,
+      orderNumber: OrderAdapter.generateOrderNumber(),
       items: orderItems,
       totalAmount: totalPrice,
       shippingFee: deliveryFee,

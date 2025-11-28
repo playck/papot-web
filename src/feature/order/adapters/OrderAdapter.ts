@@ -163,19 +163,6 @@ export class OrderAdapter {
   }
 
   /**
-   * 주문 번호 생성
-   */
-  static generateOrderNumber(): string {
-    const now = new Date();
-    const year = now.getFullYear();
-    const month = String(now.getMonth() + 1).padStart(2, "0");
-    const day = String(now.getDate()).padStart(2, "0");
-    const random = String(Math.floor(Math.random() * 1000)).padStart(3, "0");
-
-    return `ORD-${year}${month}${day}-${random}`;
-  }
-
-  /**
    * ClientOrder를 서버 전송용 데이터로 변환
    */
   static toServerOrderData(order: ClientOrder): ServerOrderData {
@@ -218,5 +205,19 @@ export class OrderAdapter {
       unit_price: item.unitPrice,
       total_price: item.totalPrice,
     }));
+  }
+
+  /**
+   * 주문 번호 생성
+   */
+  static generateOrderNumber(): string {
+    const now = new Date();
+    const year = String(now.getFullYear()).slice(2);
+    const month = String(now.getMonth() + 1).padStart(2, "0");
+    const day = String(now.getDate()).padStart(2, "0");
+    const random = String(Math.floor(Math.random() * 10000)).padStart(4, "0");
+
+    // 예: 250105-1234 (YYMMDD-랜덤 4자리)
+    return `${year}${month}${day}-${random}`;
   }
 }
