@@ -1,6 +1,6 @@
 import { useState } from "react";
 import Link from "next/link";
-import { User, LogOut } from "lucide-react";
+import { User, LogOut, Package } from "lucide-react";
 import { useAuth } from "@/shared/hooks/useAuth";
 import { signOut } from "@/app/(auth)/services/api";
 
@@ -64,7 +64,15 @@ export default function UserMenu() {
           )}
         </>
       ) : (
-        <div className="flex items-center space-x-4">
+        <div className="flex items-center space-x-3">
+          <Link
+            href="/order/guest-lookup"
+            className="text-sm font-medium text-muted-foreground hover:text-primary-600 transition-colors flex items-center gap-1"
+            title="비회원 주문 조회"
+          >
+            <Package className="h-4 w-4" />
+            <span className="hidden lg:inline">주문조회</span>
+          </Link>
           <Link
             href="/signin"
             className="text-sm font-medium text-muted-foreground hover:text-primary-600 transition-colors"

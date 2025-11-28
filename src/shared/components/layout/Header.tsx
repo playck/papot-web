@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useCategories } from "@/shared/hooks/useCategories";
+import { useAuth } from "@/shared/hooks/useAuth";
 import Logo from "./header/Logo";
 import DesktopNav from "./header/DesktopNav";
 import CartButton from "./header/CartButton";
@@ -12,6 +13,7 @@ import MobileMenu from "./header/MobileMenu";
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { categories } = useCategories();
+  const { user } = useAuth();
 
   return (
     <>
@@ -23,7 +25,7 @@ const Header = () => {
 
             {/* 우측 액션 버튼들 */}
             <div className="flex items-center space-x-4">
-              <CartButton />
+              {user && <CartButton />}
               <div className="hidden md:block">
                 <UserMenu />
               </div>
