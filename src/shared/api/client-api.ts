@@ -219,6 +219,31 @@ export async function getUserOrders(userId: string) {
   return orders || [];
 }
 
+// 비회원 주문 조회 (주문번호 + 휴대폰 번호)
+export async function getGuestOrder(orderNumber: string, phone: string) {
+  const { data, error } = await supabase
+    .from("orders")
+    .select(
+      `
+      *,
+      order_items (*)
+    `
+    )
+    .eq("order_number", orderNumber)
+    .eq("customer_phone", phone)
+    .maybeSingle();
+
+  if (error) {
+    throw new Error(`주문 조회 실패: ${error.message}`);
+  }
+
+  if (!data) {
+    return null;
+  }
+
+  return data;
+}
+
 /**
  * 사용자의 장바구니 조회
  */
