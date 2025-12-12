@@ -41,6 +41,14 @@ export default function DesktopNav({ categories }: DesktopNavProps) {
           </div>
         );
       })}
+
+      {/* About 링크 */}
+      <Link
+        href="/about"
+        className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary-600"
+      >
+        about
+      </Link>
     </nav>
   );
 }
