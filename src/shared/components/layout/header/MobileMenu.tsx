@@ -100,28 +100,48 @@ export default function MobileMenu({
                 </div>
               );
             })}
+
+            <Link
+              href="/about"
+              className="block px-2 py-2 text-sm font-medium text-muted-foreground transition-colors rounded-md"
+              onClick={onClose}
+            >
+              About
+            </Link>
           </div>
 
-          {user && (
-            <div className="space-y-1 mt-4 pt-4 border-t border-border">
-              <p className="px-2 pb-1 text-xs font-semibold text-neutral-500 uppercase">
-                마이메뉴
-              </p>
-              <Link
-                href="/mypage"
-                className="block px-2 py-2 text-sm font-medium text-muted-foreground transition-colors rounded-md"
-                onClick={onClose}
-              >
-                마이페이지
-              </Link>
-              <button
-                onClick={handleSignOut}
-                className="w-full text-left px-2 py-2 text-sm font-medium text-muted-foreground transition-colors rounded-md"
-              >
-                로그아웃
-              </button>
-            </div>
-          )}
+          <div className="space-y-1 mt-2 pt-2 border-t border-border">
+            {user ? (
+              <>
+                <p className="px-2 pb-1 text-xs font-semibold text-neutral-500 uppercase">
+                  마이메뉴
+                </p>
+                <Link
+                  href="/mypage"
+                  className="block px-2 py-2 text-sm font-medium text-muted-foreground transition-colors rounded-md"
+                  onClick={onClose}
+                >
+                  마이페이지
+                </Link>
+                <button
+                  onClick={handleSignOut}
+                  className="w-full text-left px-2 py-2 text-sm font-medium text-muted-foreground transition-colors rounded-md"
+                >
+                  로그아웃
+                </button>
+              </>
+            ) : (
+              <>
+                <Link
+                  href="/order/guest-lookup"
+                  className="block px-2 py-2 text-sm font-medium text-muted-foreground transition-colors rounded-md"
+                  onClick={onClose}
+                >
+                  비회원 주문 조회
+                </Link>
+              </>
+            )}
+          </div>
         </nav>
       </div>
     </>
