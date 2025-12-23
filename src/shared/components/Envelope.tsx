@@ -80,8 +80,8 @@ export function Envelope({ children, className = "" }: EnvelopeProps) {
         transition={{
           y: {
             delay: isOpen ? 0.77 : 0,
-            duration: 0.42,
-            ease: [0.34, 1.56, 0.64, 1],
+            duration: 1.5,
+            ease: "easeInOut",
           },
         }}
         style={{
